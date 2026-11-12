@@ -53,7 +53,7 @@ h2{font:700 24px "Space Grotesk",sans-serif;margin:0 0 4px}
 .chips{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:2px;scrollbar-width:none}.chips::-webkit-scrollbar,.new::-webkit-scrollbar{display:none}
 .chip{flex:none;font-size:13px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--mute);cursor:pointer}
 .chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:12px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
 .card:hover{border-color:#34345a;transform:translateY(-2px)}
 .card.hl{outline:2px solid var(--a2);outline-offset:2px}
@@ -64,10 +64,15 @@ h2{font:700 24px "Space Grotesk",sans-serif;margin:0 0 4px}
 .cv .play{position:absolute;z-index:2;right:10px;bottom:10px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(11,11,18,.75);backdrop-filter:blur(6px);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s}
 .cv .play:hover{transform:scale(1.08);background:var(--a2)}
 .tag{position:absolute;z-index:2;left:10px;top:10px;font-size:11px;font-weight:600;padding:4px 8px;border-radius:999px;background:rgba(11,11,18,.7);backdrop-filter:blur(6px)}
-.body{padding:12px 12px 14px;display:flex;flex-direction:column;gap:10px;flex:1}
-.ttl{font:600 15px Inter,sans-serif;margin:0}
+.body{padding:9px 9px 10px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card{cursor:pointer}
+.acts .btn{font-size:12px;padding:7px 8px;border-radius:9px}
+.acts .btn svg{flex:none}
+.ed{font-weight:500;opacity:.8}
+.cr{background:transparent;border-color:transparent;color:var(--mute);font-weight:500}.cr:hover{color:var(--text)}
+.ttl{font:600 14px Inter,sans-serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ttl a{color:inherit}
 .gen{font-size:12px;color:var(--mute);margin-top:2px}
-.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
+.acts{display:grid;grid-template-columns:1fr;gap:6px;margin-top:auto}
 .acts .full{grid-column:1/-1}
 .more{text-align:center;margin:22px 0}
 .empty{color:var(--mute);padding:30px 0;text-align:center}
@@ -105,7 +110,7 @@ body.hasbar footer{padding-bottom:100px}
 @media (max-width:640px){.bar .prog .tm,.bar .hint,.bar .dl{display:none}.bar .meta{flex:1}}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(30px);opacity:0;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;transition:.25s;z-index:60}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (max-width:640px){nav.links{display:none}.hero{padding:48px 0 24px}.grid{grid-template-columns:repeat(2,1fr);gap:10px}.acts{grid-template-columns:1fr}.btn{padding:9px 8px;font-size:12px}.body{padding:10px}}
+@media (max-width:640px){nav.links{display:none}.hero{padding:48px 0 24px}.grid{grid-template-columns:repeat(2,1fr);gap:8px}.acts{grid-template-columns:1fr}.btn{padding:9px 8px;font-size:12px}.body{padding:10px}}
 </style>
 </head>
 <body>
@@ -127,7 +132,7 @@ body.hasbar footer{padding-bottom:100px}
   <div class="stats">
     <span class="pill"><b id="nTracks">500+</b> tracks</span>
     <span class="pill"><b>Free</b> to use with credit</span>
-    <span class="pill"><b>MP3</b> + all versions in ZIP</span>
+    <span class="pill"><b>MP3</b> + Full Pack of edits</span>
   </div>
 </div></div>
 
@@ -136,6 +141,12 @@ body.hasbar footer{padding-bottom:100px}
     <h2>🔥 New this week</h2>
     <p class="sub">The tracks from our latest videos — the one you just heard is probably here.</p>
     <div class="new" id="newRow"></div>
+  </section>
+
+  <section id="rel" hidden>
+    <h2>✨ New releases</h2>
+    <p class="sub">Fresh tracks just released on Spotify, Apple Music and YouTube — free to use with credit.</p>
+    <div class="new" id="relRow"></div>
   </section>
 
   <section id="all">
@@ -200,7 +211,7 @@ Free download: https://bodleasons.github.io</code>
   <img id="bCover" alt="">
   <div class="meta"><div class="ttl" id="bTitle"></div><div class="hint" id="bHint">Preview · full track in MP3</div></div>
   <div class="prog"><span class="tm" id="bCur">0:00</span><div class="track" id="bTrack"><i id="bFill"></i></div><span class="tm" id="bDur">1:00</span></div>
-  <a class="btn main dl" id="bDl" href="#">⬇ MP3</a>
+  <a class="btn main dl" id="bDl" href="#" data-gc="mp3">⬇ Free Download MP3</a>
   <button class="btn" onclick="stopBar()" aria-label="Close player">✕</button>
 </div></div>
 <audio id="aud" preload="none"></audio>
@@ -213,7 +224,7 @@ let AUDIO = {}, SOCIAL = {};
 const TH = id => 'https://lh3.googleusercontent.com/d/' + id + '=w500';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-let ALL = [], VIEW = [], shown = 0, genre = 'Top 100', RANK = {}, CUR = null;
+let META = {}; let ALL = [], VIEW = [], shown = 0, genre = 'Top 100', RANK = {}, CUR = null;
 const rk = t => RANK[t.t] || 1e9;
 const PAGE = 48;
 
@@ -221,9 +232,11 @@ function toast(t){const e=document.getElementById('toast');e.textContent=t;e.cla
 function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied ✓'),()=>{prompt('Copy:',t)})}
 function credit(t){return `Music: ${t.t} by BoDleasons\nFree download: https://bodleasons.github.io/t/${slug(t.t)}/`}
 
+function edits(id){ const m = META[id]; const n = m && m.v ? m.v.length + 1 : 0; return n > 1 ? n + ' edits' : 'ZIP' }
+function cardGo(e, id){ if(e.target.closest('a,button')) return; location.href = 't/' + id + '/' }
 function card(t, big){
   const id = slug(t.t);
-  return `<article class="card" id="${id}">
+  return `<article class="card" id="${id}" onclick="cardGo(event,'${id}')">
     <div class="cv">
       <div class="ph">${esc(t.t)}</div>
       ${t.cover ? `<img loading="lazy" src="${TH(t.cover)}" alt="${esc(t.t)} cover" onload="this.classList.add('ld')" onerror="this.remove()">` : ''}
@@ -231,12 +244,12 @@ function card(t, big){
       <button class="play" title="Listen" aria-label="Listen to ${esc(t.t)}" onclick="play('${id}')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
     </div>
     <div class="body">
-      <div><h3 class="ttl"><a href="t/${id}/" style="text-decoration:none">${esc(t.t)}</a></h3><div class="gen">${esc(t.g)}</div></div>
+      <div><h3 class="ttl" title="${esc(t.t)}"><a href="t/${id}/" style="text-decoration:none">${esc(t.t)}</a></h3><div class="gen">${esc(t.g)}</div></div>
       <div class="acts">
-        <a class="btn main ${t.zip ? '' : 'full'}" href="${DL(t.mp3)}" rel="nofollow">⬇ MP3</a>
-        ${t.zip ? `<a class="btn" href="${DL(t.zip)}" rel="nofollow" title="Full + short versions">⬇ All versions</a>` : ''}
-        ${SOCIAL[id] && SOCIAL[id].shorts ? `<a class="btn full soc" href="${SOCIAL[id].shorts}" target="_blank" rel="noopener" title="Open this sound in YouTube Shorts">▶ Use in Shorts</a>` : ''}
-        <button class="btn full" onclick="copy(credit(ALL.find(x=>slug(x.t)==='${id}')))">📋 Copy credit</button>
+        <a class="btn main" href="${DL(t.mp3)}" rel="nofollow" data-gc="mp3">⬇ Free Download MP3</a>
+        ${t.zip ? `<a class="btn zipb" href="${DL(t.zip)}" rel="nofollow" data-gc="zip" title="ZIP: full track + all short edits, ready for Shorts, Reels and ads">📦 Full Pack <span class="ed">· ${edits(id)}</span></a>` : ''}
+        ${SOCIAL[id] && SOCIAL[id].shorts ? `<a class="btn soc" href="${SOCIAL[id].shorts}" target="_blank" rel="noopener" title="Open this sound in YouTube Shorts"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1z"/></svg> Use in YT Shorts</a>` : ''}
+        <button class="btn cr" title="Copies a ready credit line for your video description" onclick="copy(credit(ALL.find(x=>slug(x.t)==='${id}')))">📋 Copy credit</button>
       </div>
     </div>
   </article>`;
@@ -270,7 +283,7 @@ function openP(id){
   document.getElementById('pGenre').textContent = t.g + ' · by BoDleasons';
   const c = document.getElementById('pCover'); c.src = t.cover ? TH(t.cover) : '';
   document.getElementById('pFrame').src = 'https://drive.google.com/file/d/' + t.mp3 + '/preview';
-  document.getElementById('pActs').innerHTML = `<a class="btn main" href="${DL(t.mp3)}">⬇ Download MP3</a>` + (t.zip ? `<a class="btn" href="${DL(t.zip)}">⬇ All versions</a>` : '') + `<button class="btn" onclick="copy(credit(ALL.find(x=>slug(x.t)==='${id}')))">📋 Copy credit</button>`;
+  document.getElementById('pActs').innerHTML = `<a class="btn main" href="${DL(t.mp3)}" data-gc="mp3">⬇ Free Download MP3</a>` + (t.zip ? `<a class="btn" href="${DL(t.zip)}" data-gc="zip">📦 Full Pack · ${edits(id)}</a>` : '') + `<button class="btn" onclick="copy(credit(ALL.find(x=>slug(x.t)==='${id}')))">📋 Copy credit</button>`;
   document.getElementById('modal').classList.add('on');
 }
 function closeP(){document.getElementById('modal').classList.remove('on');document.getElementById('pFrame').src='about:blank'}
@@ -295,7 +308,8 @@ function render(reset){
 }
 
 function chips(){
-  const gs = ['All', 'Top 100', ...[...new Set(ALL.map(t => t.g))]];
+  const sc = {}; ALL.forEach(t => { sc[t.g] = (sc[t.g]||0) + (RANK[t.t] ? 1000/(RANK[t.t]+10) : 0.01) });
+  const gs = ['All', 'Top 100', ...[...new Set(ALL.map(t => t.g))].sort((a,b) => sc[b] - sc[a])];
   const lbl = g => g==='All' ? 'All · ' + ALL.length : g==='Top 100' ? '🔥 Top 100' : g + ' · ' + ALL.filter(t=>t.g===g).length;
   document.getElementById('chips').innerHTML = gs.filter(g => g!=='Top 100' || Object.keys(RANK).length).map(g => `<button class="chip ${g==='Top 100'?'top':''} ${g===genre?'on':''}" data-g="${esc(g)}">${esc(lbl(g))}</button>`).join('');
   document.querySelectorAll('.chip').forEach(b => b.onclick = () => { genre = b.dataset.g; chips(); render(true); });
@@ -309,16 +323,22 @@ function newWeek(list){
   if(out.length){ document.getElementById('new').hidden = false; document.getElementById('newRow').innerHTML = out.map(t => card(t, true)).join(''); }
 }
 
+function newRel(){
+  const out = ALL.filter(t => META[slug(t.t)] && META[slug(t.t)].rd).sort((a,b) => META[slug(b.t)].rd.localeCompare(META[slug(a.t)].rd)).slice(0, 12)
+    .map(t => ({...t, when: new Date(META[slug(t.t)].rd + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'})}));
+  if(out.length){ document.getElementById('rel').hidden = false; document.getElementById('relRow').innerHTML = out.map(t => card(t, true)).join(''); }
+}
 async function init(){
-  const [tracks, nw, rank, au, so] = await Promise.all([
+  const [tracks, nw, rank, au, so, me] = await Promise.all([
     fetch('data/tracks.json', {cache:'no-cache'}).then(r => r.json()),
     fetch('data/new.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : []).catch(() => []),
     fetch('data/rank.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({})),
     fetch('data/audio.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-    fetch('data/social.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({}))
+    fetch('data/social.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({})),
+    fetch('data/meta.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({}))
   ]);
-  ALL = tracks; RANK = rank || {}; AUDIO = au || {}; SOCIAL = so || {}; if(!Object.keys(RANK).length) genre = 'All'; document.getElementById('nTracks').textContent = ALL.length;
-  newWeek(nw); chips(); render(true);
+  ALL = tracks; RANK = rank || {}; AUDIO = au || {}; SOCIAL = so || {}; META = me || {}; if(!Object.keys(RANK).length) genre = 'All'; document.getElementById('nTracks').textContent = ALL.length;
+  newWeek(nw); newRel(); chips(); render(true);
   document.getElementById('q').addEventListener('input', () => render(true));
   document.getElementById('moreBtn').onclick = () => render(false);
   document.getElementById('sort').onchange = () => render(true);
@@ -332,7 +352,7 @@ init();
 </script>
 <script data-goatcounter="https://bodleasons.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a||!window.goatcounter||!goatcounter.count)return;var h=a.href||'',n=null;
-if(h.indexOf('drive.google.com/uc')>-1)n=(a.textContent.indexOf('All versions')>-1?'zip':'mp3');else if(h.indexOf('youtube.com/source')>-1)n='use-shorts';else if(h.indexOf('t.me/')>-1)n='telegram';
+if(h.indexOf('drive.google.com/uc')>-1)n=(a.dataset.gc==='zip'||a.textContent.indexOf('Full Pack')>-1?'zip':'mp3');else if(h.indexOf('youtube.com/source')>-1)n='use-shorts';else if(h.indexOf('t.me/')>-1)n='telegram';
 if(n){var t=(document.querySelector('h1')&&location.pathname.indexOf('/t/')===0)?document.querySelector('h1').textContent:((a.closest('.card')||{}).id||(window.CUR&&CUR.t)||'');goatcounter.count({path:n+'/'+t,title:n+': '+t,event:true})}},true);</script>
 </body>
 </html>

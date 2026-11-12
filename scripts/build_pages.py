@@ -54,7 +54,7 @@ FOOT = """<footer><div class="wrap">© BoDleasons — music by Bohdan Kuzmin · 
 <script>function cp(t){navigator.clipboard.writeText(t).then(()=>alert('Copied ✓'))}</script>
 <script data-goatcounter="https://bodleasons.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a||!window.goatcounter||!goatcounter.count)return;var h=a.href||'',n=null;
-if(h.indexOf('drive.google.com/uc')>-1)n=(a.textContent.indexOf('All versions')>-1?'zip':'mp3');else if(h.indexOf('youtube.com/source')>-1)n='use-shorts';else if(h.indexOf('t.me/')>-1)n='telegram';
+if(h.indexOf('drive.google.com/uc')>-1)n=(a.dataset.gc==='zip'||a.textContent.indexOf('Full Pack')>-1?'zip':'mp3');else if(h.indexOf('youtube.com/source')>-1)n='use-shorts';else if(h.indexOf('t.me/')>-1)n='telegram';
 if(n){var t=(document.querySelector('h1')&&location.pathname.indexOf('/t/')===0)?document.querySelector('h1').textContent:((a.closest('.card')||{}).id||(window.CUR&&CUR.t)||'');goatcounter.count({path:n+'/'+t,title:n+': '+t,event:true})}},true);</script>
 </body></html>"""
 
@@ -75,11 +75,11 @@ def main():
         s = slug(t["t"]); m = meta.get(s, {}); g = t["g"]; url = f"{SITE}/t/{s}/"
         uses = USES.get(g, "YouTube videos, Shorts, Reels and TikTok")
         title = f"{t['t']} — Free {g.split(',')[0].split(' & ')[0]} Background Music (MP3) | BoDleasons"
-        desc = f"Download \"{t['t']}\" by BoDleasons for free: {g.lower()} background music for {uses}. Instant MP3, all versions in ZIP. Free to use with credit."
+        desc = f"Download \"{t['t']}\" by BoDleasons for free: {g.lower()} background music for {uses}. Instant MP3 + Full Pack of edits. Free to use with credit."
         src = (REL + s + ".mp3") if s in audio else (f"/previews/{s}.mp3" if t.get("p") else "")
         so = social.get(s, {})
         socbtn = "".join(f'<a class="btn soc" href="{e(so[k])}" target="_blank" rel="noopener">{lab}</a>' for k, lab in
-                         (("shorts", "▶ Use in Shorts"), ("tiktok", "♪ Use in TikTok"), ("reels", "◎ Use in Reels")) if so.get(k))
+                         (("shorts", "▶ Use in YT Shorts"), ("tiktok", "♪ Use in TikTok"), ("reels", "◎ Use in Instagram Reels")) if so.get(k))
         vers = ", ".join(["Full"] + [v.replace(" Version", "") for v in m.get("v", [])])
         more = sorted([x for x in bygenre[g] if x is not t], key=rk)[:12]
         credit = e(json.dumps(f"Music: {t['t']} by BoDleasons\nFree download: {url}"))
@@ -93,8 +93,9 @@ def main():
 <div><h1>{e(t['t'])}</h1><p class="by">by BoDleasons · {e(g)} · {fmt(m.get('dur'))}</p>
 <p class="lead">Free {e(g.lower())} background music for {e(uses)}. Free to use in your videos with credit.</p>
 {f'<audio controls preload="metadata" src="{src}"></audio>' if src else ''}
-<div class="btns"><a class="btn main" href="{DL(t['mp3'])}" rel="nofollow">⬇ Free Download MP3</a>{f'<a class="btn" href="{DL(t["zip"])}" rel="nofollow">⬇ All versions (ZIP)</a>' if t.get('zip') else ''}
-<button class="btn" onclick="cp({credit})">📋 Copy credit</button></div>
+<div class="btns"><a class="btn main" href="{DL(t['mp3'])}" rel="nofollow">⬇ Free Download MP3</a>{f'<a class="btn" href="{DL(t["zip"])}" rel="nofollow" data-gc="zip">📦 Full Pack · {len(m.get("v", [])) + 1} edits (ZIP)</a>' if t.get('zip') else ''}
+<button class="btn" onclick="cp({credit})" title="Copies a ready credit line for your video description">📋 Copy credit</button></div>
+<p class="by" style="margin-top:8px">Free to use with credit: paste the credit line into your video description. Monetized videos may get a Content ID claim — that's normal, your video stays up.</p>
 {f'<div class="btns">{socbtn}</div>' if socbtn else ''}
 </div></div>
 <div class="box"><dl><dt>Track</dt><dd>{e(t['t'])}</dd><dt>Artist</dt><dd>BoDleasons (Bohdan Kuzmin)</dd><dt>Genre</dt><dd><a href="/genre/{slug(g)}/">{e(g)}</a></dd>
