@@ -2,7 +2,7 @@
 """Собирает data/tracks.json и data/new.json из ПУБЛИЧНОЙ папки Google Drive «BoDleasons Free Music».
 Запускается GitHub Actions (каждый день) — ничего не нужно делать руками.
 Структура папки: <Жанр>/<Трек>/{<Трек> - BoDleasons.mp3, ... (All Versions).zip, cover.jpg}; в корне new_this_week.json."""
-import json, re, sys, time, urllib.request, concurrent.futures as cf
+import json, os, re, sys, time, urllib.request, concurrent.futures as cf
 ROOT = "1FQFmGJ5hXXaYXId8siVZ9YQ5q_8sAIZw"
 UA = {"User-Agent": "Mozilla/5.0 (BoDleasons site builder)"}
 
@@ -25,6 +25,17 @@ def ls(fid):
 def main():
     root = ls(ROOT)
     if not root: sys.exit("пустой корень — Drive не ответил, данные не трогаю")
+    # файлы сайта лежат в корне папки: _site_<путь, где / заменён на __>, напр. _site_index.html → index.html
+    for x in root:
+        if not x["folder"] and x["name"].startswith("_site_"):
+            path = x["name"][6:].replace("__", "/")
+            try:
+                data = get(f"https://drive.google.com/uc?export=download&id={x['id']}")
+                if b"bodleasons-site" in data or not path.endswith(".html"):   # защита от страницы-ошибки Google
+                    os.makedirs(os.path.dirname(path) or ".", exist_ok=True); open(path, "wb").write(data)
+                    print("site:", path, len(data))
+            except Exception as e:
+                print("site file", path, "не скачан:", e)
     tracks = []
     genres = [x for x in root if x["folder"] and not x["name"].startswith("_")]
     jobs = []
