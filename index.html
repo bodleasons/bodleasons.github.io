@@ -84,8 +84,24 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-con
 .player .hd{display:flex;align-items:center;gap:12px;padding:14px}
 .player .hd img{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--panel2)}
 .player .hd .x{margin-left:auto}
-.player iframe{width:100%;height:90px;border:0;background:#000;display:block}
+.player iframe{width:100%;height:120px;border:0;background:#000;display:block}
 .player .ft{display:flex;gap:8px;padding:14px;flex-wrap:wrap}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(20,20,31,.92);backdrop-filter:blur(16px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s}
+.bar.on{transform:none}
+.bar .wrap{display:flex;align-items:center;gap:12px;height:72px}
+.bar img{width:48px;height:48px;border-radius:10px;object-fit:cover;background:var(--panel2)}
+.bar .meta{min-width:0;flex:0 1 220px}.bar .meta .ttl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .pp{width:44px;height:44px;border-radius:50%;border:0;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
+.bar .prog{flex:1;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--mute);min-width:0}
+.bar .track{flex:1;height:6px;border-radius:3px;background:var(--line);cursor:pointer;position:relative;overflow:hidden}
+.bar .track i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--a1),var(--a2))}
+.bar .hint{font-size:11px;color:var(--mute)}
+.card.playing{border-color:var(--a2)}
+.card.playing .play{background:var(--a2)}
+.sortsel{background:var(--panel);color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:6px 10px;font:13px Inter,sans-serif;flex:none}
+.chip.top{border-color:#5a3a7a;color:#ffb3d9}.chip.top.on{background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;border-color:transparent}
+body.hasbar footer{padding-bottom:100px}
+@media (max-width:640px){.bar .prog .tm,.bar .hint,.bar .dl{display:none}.bar .meta{flex:1}}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(30px);opacity:0;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;transition:.25s;z-index:60}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media (max-width:640px){nav.links{display:none}.hero{padding:48px 0 24px}.grid{grid-template-columns:repeat(2,1fr);gap:10px}.acts{grid-template-columns:1fr}.btn{padding:9px 8px;font-size:12px}.body{padding:10px}}
@@ -121,12 +137,12 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-con
   </section>
 
   <section id="all">
-    <h2>All tracks</h2>
+    <h2>Browse the library</h2>
     <div class="tools">
       <div class="search">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--mute)"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="q" type="search" placeholder="Search a track you heard… (e.g. Lo-Fi Chill)" autocomplete="off" aria-label="Search tracks">
-        <span class="pill" id="count" style="padding:6px 10px">…</span>
+        <select class="sortsel" id="sort" aria-label="Sort"><option value="pop">Popular first</option><option value="az">A → Z</option></select><span class="pill" id="count" style="padding:6px 10px">…</span>
       </div>
       <div class="chips" id="chips"></div>
     </div>
@@ -175,6 +191,15 @@ Free download: https://bodleasons.github.io</code>
     <div class="ft" id="pActs"></div>
   </div>
 </div>
+<div class="bar" id="bar"><div class="wrap">
+  <button class="pp" id="bPP" aria-label="Play/Pause"><svg id="bIco" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+  <img id="bCover" alt="">
+  <div class="meta"><div class="ttl" id="bTitle"></div><div class="hint">Preview · full track in MP3</div></div>
+  <div class="prog"><span class="tm" id="bCur">0:00</span><div class="track" id="bTrack"><i id="bFill"></i></div><span class="tm" id="bDur">1:00</span></div>
+  <a class="btn main dl" id="bDl" href="#">⬇ MP3</a>
+  <button class="btn" onclick="stopBar()" aria-label="Close player">✕</button>
+</div></div>
+<audio id="aud" preload="none"></audio>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -182,7 +207,8 @@ const DL = id => 'https://drive.google.com/uc?export=download&id=' + id;
 const TH = id => 'https://lh3.googleusercontent.com/d/' + id + '=w500';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-let ALL = [], VIEW = [], shown = 0, genre = 'All';
+let ALL = [], VIEW = [], shown = 0, genre = 'Top 100', RANK = {}, CUR = null;
+const rk = t => RANK[t.t] || 1e9;
 const PAGE = 48;
 
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1600)}
@@ -196,7 +222,7 @@ function card(t, big){
       <div class="ph">${esc(t.t)}</div>
       ${t.cover ? `<img loading="lazy" src="${TH(t.cover)}" alt="${esc(t.t)} cover" onload="this.classList.add('ld')" onerror="this.remove()">` : ''}
       ${big && t.when ? `<span class="tag">${esc(t.when)}</span>` : ''}
-      <button class="play" title="Listen" aria-label="Listen to ${esc(t.t)}" onclick="openP('${id}')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="play" title="Listen" aria-label="Listen to ${esc(t.t)}" onclick="play('${id}')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
     </div>
     <div class="body">
       <div><h3 class="ttl">${esc(t.t)}</h3><div class="gen">${esc(t.g)}</div></div>
@@ -209,6 +235,26 @@ function card(t, big){
   </article>`;
 }
 
+const aud = document.getElementById('aud');
+function fmt(s){ s = Math.max(0, Math.floor(s||0)); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0') }
+function ico(p){ document.getElementById('bIco').innerHTML = p ? '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>' }
+function markPlaying(){ document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing')); if(CUR) document.querySelectorAll('[id="'+slug(CUR.t)+'"]').forEach(c => c.classList.add('playing')) }
+function play(id){
+  const t = ALL.find(x => slug(x.t) === id); if(!t) return;
+  if(!t.p) return openP(id);                       // нет превью — плеер Google Drive
+  if(CUR && CUR.t === t.t){ aud.paused ? aud.play() : aud.pause(); return }
+  CUR = t; aud.src = 'previews/' + id + '.mp3'; aud.play().catch(()=>{});
+  document.getElementById('bTitle').textContent = t.t;
+  document.getElementById('bCover').src = t.cover ? TH(t.cover) : '';
+  document.getElementById('bDl').href = DL(t.mp3);
+  document.getElementById('bar').classList.add('on'); document.body.classList.add('hasbar'); markPlaying();
+}
+function stopBar(){ aud.pause(); CUR = null; document.getElementById('bar').classList.remove('on'); document.body.classList.remove('hasbar'); markPlaying() }
+aud.addEventListener('play', () => ico(true)); aud.addEventListener('pause', () => ico(false));
+aud.addEventListener('timeupdate', () => { document.getElementById('bCur').textContent = fmt(aud.currentTime); document.getElementById('bDur').textContent = fmt(aud.duration || 60); document.getElementById('bFill').style.width = (100 * aud.currentTime / (aud.duration || 60)) + '%' });
+aud.addEventListener('ended', () => ico(false));
+document.getElementById('bPP').onclick = () => CUR && (aud.paused ? aud.play() : aud.pause());
+document.getElementById('bTrack').onclick = e => { const r = e.currentTarget.getBoundingClientRect(); if(aud.duration) aud.currentTime = aud.duration * (e.clientX - r.left) / r.width };
 function openP(id){
   const t = ALL.find(x => slug(x.t) === id); if(!t) return;
   document.getElementById('pTitle').textContent = t.t;
@@ -224,20 +270,25 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeP() });
 function render(reset){
   const q = document.getElementById('q').value.trim().toLowerCase();
   if(reset){
-    VIEW = ALL.filter(t => (genre==='All' || t.g===genre) && (!q || (t.t + ' ' + t.g).toLowerCase().includes(q)));
+    const pop = document.getElementById('sort').value === 'pop';
+    if(genre === 'Top 100' && !q) VIEW = [...ALL].filter(t => RANK[t.t]).sort((a,b) => rk(a) - rk(b)).slice(0, 100);
+    else VIEW = ALL.filter(t => (genre==='All' || genre==='Top 100' || t.g===genre) && (!q || (t.t + ' ' + t.g).toLowerCase().includes(q)));
+    if(pop) VIEW.sort((a,b) => rk(a) - rk(b) || a.t.localeCompare(b.t)); else VIEW.sort((a,b) => a.t.localeCompare(b.t));
     if(q) VIEW.sort((a,b) => (b.t.toLowerCase().startsWith(q)) - (a.t.toLowerCase().startsWith(q)));
     shown = 0; document.getElementById('grid').innerHTML = '';
   }
   const next = VIEW.slice(shown, shown + PAGE); shown += next.length;
   document.getElementById('grid').insertAdjacentHTML('beforeend', next.map(t => card(t)).join(''));
+  markPlaying();
   document.getElementById('count').textContent = VIEW.length + ' tracks';
   document.getElementById('empty').hidden = VIEW.length > 0;
   document.getElementById('moreBtn').hidden = shown >= VIEW.length;
 }
 
 function chips(){
-  const gs = ['All', ...[...new Set(ALL.map(t => t.g))]];
-  document.getElementById('chips').innerHTML = gs.map(g => `<button class="chip ${g===genre?'on':''}" data-g="${esc(g)}">${esc(g)}${g==='All'?'':' · ' + ALL.filter(t=>t.g===g).length}</button>`).join('');
+  const gs = ['All', 'Top 100', ...[...new Set(ALL.map(t => t.g))]];
+  const lbl = g => g==='All' ? 'All · ' + ALL.length : g==='Top 100' ? '🔥 Top 100' : g + ' · ' + ALL.filter(t=>t.g===g).length;
+  document.getElementById('chips').innerHTML = gs.filter(g => g!=='Top 100' || Object.keys(RANK).length).map(g => `<button class="chip ${g==='Top 100'?'top':''} ${g===genre?'on':''}" data-g="${esc(g)}">${esc(lbl(g))}</button>`).join('');
   document.querySelectorAll('.chip').forEach(b => b.onclick = () => { genre = b.dataset.g; chips(); render(true); });
 }
 
@@ -250,18 +301,20 @@ function newWeek(list){
 }
 
 async function init(){
-  const [tracks, nw] = await Promise.all([
+  const [tracks, nw, rank] = await Promise.all([
     fetch('data/tracks.json', {cache:'no-cache'}).then(r => r.json()),
-    fetch('data/new.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : []).catch(() => [])
+    fetch('data/new.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : []).catch(() => []),
+    fetch('data/rank.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({}))
   ]);
-  ALL = tracks; document.getElementById('nTracks').textContent = ALL.length;
+  ALL = tracks; RANK = rank || {}; if(!Object.keys(RANK).length) genre = 'All'; document.getElementById('nTracks').textContent = ALL.length;
   newWeek(nw); chips(); render(true);
   document.getElementById('q').addEventListener('input', () => render(true));
   document.getElementById('moreBtn').onclick = () => render(false);
+  document.getElementById('sort').onchange = () => render(true);
   const h = decodeURIComponent(location.hash.slice(1));
   if(h && !['new','all','license'].includes(h)){
     const t = ALL.find(x => slug(x.t) === h);
-    if(t){ document.getElementById('q').value = t.t; render(true); setTimeout(() => { const e = document.getElementById(h); if(e){ e.classList.add('hl'); e.scrollIntoView({behavior:'smooth', block:'center'}); } }, 50); }
+    if(t){ genre = 'All'; chips(); document.getElementById('q').value = t.t; render(true); setTimeout(() => { const e = document.getElementById(h); if(e){ e.classList.add('hl'); e.scrollIntoView({behavior:'smooth', block:'center'}); } }, 50); }
   }
 }
 init();
