@@ -47,11 +47,31 @@ def main():
         pick = lambda cond: next((z["id"] for z in f if cond(z["name"])), "")
         return {"t": t["name"], "g": g, "folder": t["id"],
                 "mp3": pick(lambda n: n.endswith("BoDleasons.mp3")), "zip": pick(lambda n: n.endswith(".zip")),
-                "cover": pick(lambda n: n == "cover.jpg")}
+                "cover": pick(lambda n: n == "cover.jpg"), "prev": pick(lambda n: n == "preview.mp3")}
     with cf.ThreadPoolExecutor(8) as ex: tracks = list(ex.map(one, jobs))
     tracks = [x for x in tracks if x["mp3"]]
     tracks.sort(key=lambda x: (x["g"], x["t"].lower()))
     if len(tracks) < 100: sys.exit(f"подозрительно мало треков ({len(tracks)}) — данные не трогаю")
+    # превью (60 с) кладём прямо на сайт — плеер стартует мгновенно, без Google Диска
+    os.makedirs("previews", exist_ok=True)
+    try: have = json.load(open("data/previews.json"))
+    except Exception: have = {}
+    slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
+    need = [x for x in tracks if x["prev"] and (have.get(slug(x["t"])) != x["prev"] or not os.path.exists(f"previews/{slug(x['t'])}.mp3"))]
+    def dl(x):
+        try:
+            data = get(f"https://drive.google.com/uc?export=download&id={x['prev']}")
+            if data[:3] == b"ID3" or data[:2] == b"\xff\xfb":
+                open(f"previews/{slug(x['t'])}.mp3", "wb").write(data); return slug(x["t"]), x["prev"]
+        except Exception as e:
+            print("превью", x["t"], e)
+        return None
+    with cf.ThreadPoolExecutor(8) as ex:
+        for r in ex.map(dl, need):
+            if r: have[r[0]] = r[1]
+    json.dump(have, open("data/previews.json", "w"), separators=(",", ":"))
+    print("превью скачано:", len(need))
+    for x in tracks: x["p"] = 1 if have.get(slug(x["t"])) else 0
     json.dump(tracks, open("data/tracks.json", "w"), ensure_ascii=False, separators=(",", ":"))
     new = next((x for x in root if x["name"] == "new_this_week.json"), None)
     if new:
