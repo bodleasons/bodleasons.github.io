@@ -5,15 +5,24 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: site-update
+  cancel-in-progress: false
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 180
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - run: which ffmpeg || (sudo apt-get update && sudo apt-get install -y ffmpeg)
       - run: python scripts/build_data.py
+      - run: python scripts/audio_release.py
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - run: python scripts/build_pages.py
       - run: |
           git config user.name "BoDleasons bot"
           git config user.email "bot@users.noreply.github.com"
