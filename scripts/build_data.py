@@ -25,11 +25,15 @@ def ls(fid):
 def main():
     root = ls(ROOT)
     if not root: sys.exit("пустой корень — Drive не ответил, данные не трогаю")
+    # data/hold.json: {"путь": unix_время} — пока время не прошло, копию с Диска не берём (правка залита прямо в GitHub, Диск ещё синхронизируется)
+    try: HOLD = json.load(open("data/hold.json"))
+    except Exception: HOLD = {}
     # файлы сайта лежат в корне папки: _site_<путь, где / заменён на __>, напр. _site_index.html → index.html
     for x in root:
         if not x["folder"] and x["name"].startswith("_site_"):
             path = x["name"][6:].replace("__", "/")
             if path.endswith(".py.txt"): path = path[:-4]          # .py на Диске лежит как .py.txt (иначе Google показывает «проверку на вирусы»)
+            if HOLD.get(path, 0) > time.time(): print("site: hold", path); continue
             try:
                 data = get(f"https://drive.google.com/uc?export=download&id={x['id']}")
                 page = data[:200].lstrip().lower().startswith((b"<!doctype html", b"<html"))
