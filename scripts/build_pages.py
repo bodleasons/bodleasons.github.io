@@ -50,8 +50,13 @@ def head(title, desc, url, img=""):
 <style>{CSS}</style></head><body>
 <header><div class="wrap"><a class="logo" href="/"><b class="grad">BoDleasons</b> Free Music</a><nav><a href="/#all">All tracks</a><a href="/#license">How to use</a></nav></div></header>"""
 
-FOOT = """<footer><div class="wrap">© BoDleasons — music by Bohdan Kuzmin · <a href="/">500+ free tracks</a> · <a href="mailto:bodleason.make@gmail.com">Licensing</a></div></footer>
-<script>function cp(t){navigator.clipboard.writeText(t).then(()=>alert('Copied ✓'))}</script></body></html>"""
+FOOT = """<footer><div class="wrap">© BoDleasons — music by Bohdan Kuzmin · <a href="/">500+ free tracks</a> · <a href="https://t.me/bodleasons">Telegram</a> · <a href="mailto:bodleason.make@gmail.com">Licensing</a></div></footer>
+<script>function cp(t){navigator.clipboard.writeText(t).then(()=>alert('Copied ✓'))}</script>
+<script data-goatcounter="https://bodleasons.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a||!window.goatcounter||!goatcounter.count)return;var h=a.href||'',n=null;
+if(h.indexOf('drive.google.com/uc')>-1)n=(a.textContent.indexOf('All versions')>-1?'zip':'mp3');else if(h.indexOf('youtube.com/source')>-1)n='use-shorts';else if(h.indexOf('t.me/')>-1)n='telegram';
+if(n){var t=(document.querySelector('h1')&&location.pathname.indexOf('/t/')===0)?document.querySelector('h1').textContent:((a.closest('.card')||{}).id||(window.CUR&&CUR.t)||'');goatcounter.count({path:n+'/'+t,title:n+': '+t,event:true})}},true);</script>
+</body></html>"""
 
 def fmt(s): s = int(s or 0); return f"{s // 60}:{s % 60:02d}"
 

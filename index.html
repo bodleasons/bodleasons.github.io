@@ -248,6 +248,7 @@ function ico(p){ document.getElementById('bIco').innerHTML = p ? '<path d="M7 5h
 function markPlaying(){ document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing')); if(CUR) document.querySelectorAll('[id="'+slug(CUR.t)+'"]').forEach(c => c.classList.add('playing')) }
 function play(id){
   const t = ALL.find(x => slug(x.t) === id); if(!t) return;
+  if(window.goatcounter && goatcounter.count) goatcounter.count({path:'play/'+id, title:'play: '+t.t, event:true});
   if(!t.p && !AUDIO[id]) return openP(id);                       // нет превью — плеер Google Drive
   if(CUR && CUR.t === t.t){ aud.paused ? aud.play() : aud.pause(); return }
   CUR = t; const full = !!AUDIO[id]; aud.src = full ? REL + id + '.mp3' : 'previews/' + id + '.mp3'; aud.play().catch(()=>{});
@@ -329,5 +330,9 @@ async function init(){
 }
 init();
 </script>
+<script data-goatcounter="https://bodleasons.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a||!window.goatcounter||!goatcounter.count)return;var h=a.href||'',n=null;
+if(h.indexOf('drive.google.com/uc')>-1)n=(a.textContent.indexOf('All versions')>-1?'zip':'mp3');else if(h.indexOf('youtube.com/source')>-1)n='use-shorts';else if(h.indexOf('t.me/')>-1)n='telegram';
+if(n){var t=(document.querySelector('h1')&&location.pathname.indexOf('/t/')===0)?document.querySelector('h1').textContent:((a.closest('.card')||{}).id||(window.CUR&&CUR.t)||'');goatcounter.count({path:n+'/'+t,title:n+': '+t,event:true})}},true);</script>
 </body>
 </html>
