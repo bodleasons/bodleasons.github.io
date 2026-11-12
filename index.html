@@ -40,6 +40,7 @@ h1{font:700 clamp(34px,6vw,64px)/1.05 "Space Grotesk",sans-serif;margin:0 0 14px
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:600 13px Inter,sans-serif;padding:9px 13px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--text);text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .12s,border-color .12s,background .12s}
 .btn:hover{border-color:#3a3a58;transform:translateY(-1px)}
 .btn.main{background:linear-gradient(135deg,var(--a1),var(--a2));border:0;color:#fff}
+.btn.soc{background:#102a24;border-color:#1d4a3f}
 .btn.ok{background:var(--ok);color:#06231a;border:0}
 section{padding:26px 0}
 h2{font:700 24px "Space Grotesk",sans-serif;margin:0 0 4px}
@@ -115,6 +116,7 @@ body.hasbar footer{padding-bottom:100px}
     <a href="https://www.youtube.com/@bodleasons" target="_blank" rel="noopener">YouTube</a>
     <a href="https://www.instagram.com/bodleasons/" target="_blank" rel="noopener">Instagram</a>
     <a href="https://www.tiktok.com/@bodleasons" target="_blank" rel="noopener">TikTok</a>
+    <a href="https://t.me/bodleasons" target="_blank" rel="noopener">Telegram</a>
   </nav>
 </div></header>
 
@@ -179,6 +181,7 @@ Free download: https://bodleasons.github.io</code>
 <footer><div class="wrap">
   <span>© BoDleasons — music by Bohdan Kuzmin</span>
   <span style="display:flex;gap:8px;flex-wrap:wrap">
+    <a class="btn" href="https://t.me/bodleasons" target="_blank" rel="noopener">✈️ Telegram</a>
     <a class="btn" href="https://fanlink.tv/BDfn" target="_blank" rel="noopener">🎧 Stream</a>
     <a class="btn" href="https://www.paypal.com/donate/?hosted_button_id=PZHDXKT7N2G76" target="_blank" rel="noopener">☕ Support</a>
     <a class="btn" href="mailto:bodleason.make@gmail.com">✉️ Licensing</a>
@@ -206,7 +209,7 @@ Free download: https://bodleasons.github.io</code>
 <script>
 const DL = id => 'https://drive.google.com/uc?export=download&id=' + id;
 const REL = 'https://github.com/bodleasons/bodleasons.github.io/releases/download/audio/';
-let AUDIO = {};
+let AUDIO = {}, SOCIAL = {};
 const TH = id => 'https://lh3.googleusercontent.com/d/' + id + '=w500';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -232,6 +235,7 @@ function card(t, big){
       <div class="acts">
         <a class="btn main ${t.zip ? '' : 'full'}" href="${DL(t.mp3)}" rel="nofollow">⬇ MP3</a>
         ${t.zip ? `<a class="btn" href="${DL(t.zip)}" rel="nofollow" title="Full + short versions">⬇ All versions</a>` : ''}
+        ${SOCIAL[id] && SOCIAL[id].shorts ? `<a class="btn full soc" href="${SOCIAL[id].shorts}" target="_blank" rel="noopener" title="Open this sound in YouTube Shorts">▶ Use in Shorts</a>` : ''}
         <button class="btn full" onclick="copy(credit(ALL.find(x=>slug(x.t)==='${id}')))">📋 Copy credit</button>
       </div>
     </div>
@@ -305,13 +309,14 @@ function newWeek(list){
 }
 
 async function init(){
-  const [tracks, nw, rank, au] = await Promise.all([
+  const [tracks, nw, rank, au, so] = await Promise.all([
     fetch('data/tracks.json', {cache:'no-cache'}).then(r => r.json()),
     fetch('data/new.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : []).catch(() => []),
     fetch('data/rank.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-    fetch('data/audio.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({}))
+    fetch('data/audio.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({})),
+    fetch('data/social.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({}))
   ]);
-  ALL = tracks; RANK = rank || {}; AUDIO = au || {}; if(!Object.keys(RANK).length) genre = 'All'; document.getElementById('nTracks').textContent = ALL.length;
+  ALL = tracks; RANK = rank || {}; AUDIO = au || {}; SOCIAL = so || {}; if(!Object.keys(RANK).length) genre = 'All'; document.getElementById('nTracks').textContent = ALL.length;
   newWeek(nw); chips(); render(true);
   document.getElementById('q').addEventListener('input', () => render(true));
   document.getElementById('moreBtn').onclick = () => render(false);
