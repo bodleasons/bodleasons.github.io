@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bodleasons.github.io/sitemap.xml
