@@ -29,9 +29,11 @@ def main():
     for x in root:
         if not x["folder"] and x["name"].startswith("_site_"):
             path = x["name"][6:].replace("__", "/")
+            if path.endswith(".py.txt"): path = path[:-4]          # .py на Диске лежит как .py.txt (иначе Google показывает «проверку на вирусы»)
             try:
                 data = get(f"https://drive.google.com/uc?export=download&id={x['id']}")
-                if b"bodleasons-site" in data or not path.endswith(".html"):   # защита от страницы-ошибки Google
+                page = data[:200].lstrip().lower().startswith((b"<!doctype html", b"<html"))
+                if (path.endswith(".html") and b"bodleasons-site" in data) or (not path.endswith(".html") and not page):   # защита от страницы-ошибки Google
                     os.makedirs(os.path.dirname(path) or ".", exist_ok=True); open(path, "wb").write(data)
                     print("site:", path, len(data))
             except Exception as e:
