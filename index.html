@@ -264,7 +264,7 @@ function play(id){
   if(window.goatcounter && goatcounter.count) goatcounter.count({path:'play/'+id, title:'play: '+t.t, event:true});
   if(!t.p && !AUDIO[id]) return openP(id);                       // нет превью — плеер Google Drive
   if(CUR && CUR.t === t.t){ aud.paused ? aud.play() : aud.pause(); return }
-  CUR = t; const full = !!AUDIO[id]; aud.src = full ? REL + id + '.mp3' : 'previews/' + id + '.mp3'; aud.play().catch(()=>{});
+  CUR = t; const full = !!AUDIO[id]; aud.src = full ? REL + id + '.mp3' : 'previews/' + id + '.mp3'; aud.onerror = () => { if (full && !aud.src.includes('previews/')) { aud.src = 'previews/' + id + '.mp3'; aud.play().catch(()=>{}); } }; aud.play().catch(()=>{});
   document.getElementById('bHint').textContent = full ? 'Full track · by BoDleasons' : 'Preview · full track in MP3';
   document.getElementById('bTitle').textContent = t.t;
   document.getElementById('bCover').src = t.cover ? TH(t.cover) : '';

@@ -111,7 +111,7 @@ def main():
 <img src="{TH(t['cover']) if t.get('cover') else ''}" alt="{e(t['t'])} — BoDleasons cover">
 <div><h1>{e(t['t'])}</h1><p class="by">by BoDleasons · {e(g)} · {fmt(m.get('dur'))}</p>
 <p class="lead">Free {e(g.lower())} background music for {e(uses)}. Free to use in your videos with credit.</p>
-{f'<audio controls preload="metadata" src="{src}"></audio>' if src else ''}
+{(f'<audio controls preload="metadata"><source src="{src}" type="audio/mpeg"><source src="/previews/{s}.mp3" type="audio/mpeg"></audio>' if src.startswith('http') else f'<audio controls preload="metadata" src="{src}"></audio>') if src else ''}
 <div class="btns"><a class="btn main" href="{DL(t['mp3'])}" rel="nofollow">⬇ Free Download MP3</a>{f'<a class="btn" href="{DL(t["zip"])}" rel="nofollow" data-gc="zip">📦 Full Pack · {len(m.get("v", [])) + 1} edits (ZIP)</a>' if t.get('zip') else ''}
 <button class="btn" onclick="cp({credit})" title="Copies a ready credit line for your video description">📋 Copy credit</button></div>
 <p class="by" style="margin-top:8px">Free to use with credit: paste the credit line into your video description. Monetized videos may get a Content ID claim — that's normal, your video stays up.</p>
