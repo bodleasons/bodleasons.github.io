@@ -3,7 +3,7 @@
 MP3 играет прямо в Telegram + обложка + ссылка на страницу трека на сайте. Каждый трек — не чаще раза в 3 дня.
 Нужно: секрет TELEGRAM_BOT_TOKEN (GitHub → Settings → Secrets), канал в data/telegram_channel.txt (напр. @bodleasons_music).
 Запускается в GitHub Actions после build_pages.py."""
-import datetime, json, os, re, time, urllib.request, uuid
+import datetime, json, os, re, sys, time, urllib.request, uuid
 from zoneinfo import ZoneInfo
 SITE = "https://bodleasons.github.io"
 UA = {"User-Agent": "Mozilla/5.0 (BoDleasons site builder)"}
@@ -52,10 +52,17 @@ def main():
     for s in dict.fromkeys(due):
         t = tracks[s]; g = t["g"]
         tag = "#" + re.sub(r"[^A-Za-z0-9]", "", g.split(",")[0].split(" & ")[0])
-        cap = (f"🎵 <b>{t['t']}</b> — BoDleasons\n{g} · free to use in your videos with credit\n\n"
-               f"⬇️ Free download & all versions: {SITE}/t/{s}/\n")
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); from build_pages import USES
+        except Exception: USES = {}
+        uses = USES.get(g, "YouTube videos, Shorts, Reels and TikTok")
+        gl = g.split(",")[0].split(" & ")[0].lower()
+        cap = (f"🎧 <b>{t['t']}</b> — {gl} background music for {uses}\n"
+               f"✅ Free to use in your videos with credit\n\n"
+               f"⬇️ Download MP3 + all edits: {SITE}/t/{s}/\n")
         if social.get(s, {}).get("shorts"): cap += f"🎬 Use in YouTube Shorts: {social[s]['shorts']}\n"
-        cap += f"🎧 500+ free tracks: {SITE}\n\n#BoDleasons {tag} #freemusic #backgroundmusic"
+        cap += (f"\nCredit (tap to copy):\n<code>Music: {t['t']} by BoDleasons — bodleasons.github.io/t/{s}/</code>\n\n"
+                f"#BoDleasons {tag} #freemusic")
         try:
             audio = get(f"https://drive.google.com/uc?export=download&id={t['mp3']}")
             thumb = get(f"https://lh3.googleusercontent.com/d/{t['cover']}=w320") if t.get("cover") else None
