@@ -96,7 +96,7 @@ def main():
                   ("dz", "Deezer", p.get("dz") and f"https://www.deezer.com/track/{p['dz']}")]
         usein = [("yt", "Use in YT Shorts", (social.get(s) or {}).get("shorts")),
                  ("ig", "Use in Reels", p.get("ig") and f"https://www.instagram.com/reels/audio/{p['ig']}/"),
-                 ("tt", "Use in TikTok", p.get("tt") and f"https://www.tiktok.com/music/{p['tt']}")]
+                 ("tt", "Use in TikTok", p.get("tt") and (p["tt"] if str(p["tt"]).startswith("http") else f"https://www.tiktok.com/music/{p['tt']}"))]
         lb = "".join(f'<a class="btn" href="{e(u)}" target="_blank" rel="noopener" data-gc="listen-{k}">{ICO[k]} {n}</a>' for k, n, u in listen if u)
         ub = "".join(f'<a class="btn soc" href="{e(u)}" target="_blank" rel="noopener" data-gc="use-{k}">{ICO[k]} {n}</a>' for k, n, u in usein if u)
         platblock = (f'<p class="plh">Use in short videos</p><div class="pl">{ub}</div>' if ub else "") + (f'<p class="plh">Listen on</p><div class="pl">{lb}</div>' if lb else "")
