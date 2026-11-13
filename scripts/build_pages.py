@@ -35,6 +35,8 @@ h1{font:700 clamp(28px,5vw,44px)/1.1 "Space Grotesk",sans-serif;margin:0 0 6px}h
 .by{color:var(--mute);margin:0 0 16px}.lead{color:var(--mute)}audio{width:100%;margin:12px 0 4px}
 .btns{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.btn{display:inline-flex;align-items:center;gap:7px;font:600 14px Inter,sans-serif;padding:11px 15px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--text);text-decoration:none;cursor:pointer}
 .btn.main{background:linear-gradient(135deg,var(--a1),var(--a2));border:0;color:#fff}.btn.soc{background:#102a24;border-color:#1d4a3f}
+.pl{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:10px 0 4px}.pl .btn{justify-content:center;font-size:13px;padding:9px 10px}
+.pl .btn svg{width:16px;height:16px;flex:none}.plh{font:600 12px Inter,sans-serif;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;margin:14px 0 0}
 .box{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:12px 0}.box p{margin:6px 0;color:var(--mute)}
 dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0}dt{color:var(--mute)}dd{margin:0}
 code{display:block;background:var(--bg);border:1px dashed #3a3a58;border-radius:10px;padding:10px 12px;white-space:pre-wrap;font:13px ui-monospace,Menlo,monospace}
@@ -66,7 +68,7 @@ def item(t, meta):
 
 def main():
     tracks = load("data/tracks.json", []); rank = load("data/rank.json", {}); meta = load("data/meta.json", {})
-    audio = load("data/audio.json", {}); social = load("data/social.json", {})
+    audio = load("data/audio.json", {}); social = load("data/social.json", {}); plat = load("data/platforms.json", {})
     rk = lambda t: rank.get(t["t"], 10**9)
     today = datetime.date.today().isoformat(); urls = [(SITE + "/", "1.0")]
     bygenre = {}
@@ -81,6 +83,23 @@ def main():
         socbtn = "".join(f'<a class="btn soc" href="{e(so[k])}" target="_blank" rel="noopener">{lab}</a>' for k, lab in
                          (("shorts", "▶ Use in YT Shorts"), ("tiktok", "♪ Use in TikTok"), ("reels", "◎ Use in Instagram Reels")) if so.get(k))
         vers = ", ".join(["Full"] + [v.replace(" Version", "") for v in m.get("v", [])])
+        p = plat.get(s, {}); yt = (social.get(s) or {}).get("yt", "")
+        ICO = {"sp": '<svg viewBox="0 0 24 24" fill="#1DB954"><circle cx="12" cy="12" r="11"/><path d="M7 9.5c3.5-1 7-.6 10 1M7.5 12.5c3-.8 5.8-.5 8.5 1M8 15.3c2.4-.6 4.6-.4 6.6.8" stroke="#000" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>',
+               "ap": '<svg viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#fa2d48"/><path d="M15.5 6v8.2a2.3 2.3 0 1 1-1.3-2.1V8.3l-5 1.2v6.2a2.3 2.3 0 1 1-1.3-2.1V8.4z" fill="#fff"/></svg>',
+               "yt": '<svg viewBox="0 0 24 24"><rect y="4" width="24" height="16" rx="5" fill="#ff0000"/><path d="M10 8.5v7l6-3.5z" fill="#fff"/></svg>',
+               "dz": '<svg viewBox="0 0 24 24" fill="#a238ff"><rect x="1" y="15" width="4" height="4"/><rect x="7" y="11" width="4" height="8"/><rect x="13" y="7" width="4" height="12"/><rect x="19" y="3" width="4" height="16"/></svg>',
+               "ig": '<svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg>',
+               "tt": '<svg viewBox="0 0 24 24" fill="#fff"><path d="M14 3h3a4 4 0 0 0 4 4v3a7 7 0 0 1-4-1.3V15a6 6 0 1 1-6-6v3a3 3 0 1 0 3 3z"/></svg>'}
+        listen = [("sp", "Spotify", p.get("sp") and f"https://open.spotify.com/track/{p['sp']}"),
+                  ("ap", "Apple Music", p.get("ap") and f"https://music.apple.com/us/song/{p['ap']}"),
+                  ("yt", "YouTube Music", yt and f"https://music.youtube.com/watch?v={yt}"),
+                  ("dz", "Deezer", p.get("dz") and f"https://www.deezer.com/track/{p['dz']}")]
+        usein = [("yt", "Use in YT Shorts", (social.get(s) or {}).get("shorts")),
+                 ("ig", "Use in Reels", p.get("ig") and f"https://www.instagram.com/reels/audio/{p['ig']}/"),
+                 ("tt", "Use in TikTok", p.get("tt") and f"https://www.tiktok.com/music/{p['tt']}")]
+        lb = "".join(f'<a class="btn" href="{e(u)}" target="_blank" rel="noopener" data-gc="listen-{k}">{ICO[k]} {n}</a>' for k, n, u in listen if u)
+        ub = "".join(f'<a class="btn soc" href="{e(u)}" target="_blank" rel="noopener" data-gc="use-{k}">{ICO[k]} {n}</a>' for k, n, u in usein if u)
+        platblock = (f'<p class="plh">Use in short videos</p><div class="pl">{ub}</div>' if ub else "") + (f'<p class="plh">Listen on</p><div class="pl">{lb}</div>' if lb else "")
         more = sorted([x for x in bygenre[g] if x is not t], key=rk)[:12]
         credit = e(json.dumps(f"Music: {t['t']} by BoDleasons\nFree download: {url}"))
         ld = {"@context": "https://schema.org", "@type": "MusicRecording", "name": t["t"], "url": url,
@@ -96,7 +115,7 @@ def main():
 <div class="btns"><a class="btn main" href="{DL(t['mp3'])}" rel="nofollow">⬇ Free Download MP3</a>{f'<a class="btn" href="{DL(t["zip"])}" rel="nofollow" data-gc="zip">📦 Full Pack · {len(m.get("v", [])) + 1} edits (ZIP)</a>' if t.get('zip') else ''}
 <button class="btn" onclick="cp({credit})" title="Copies a ready credit line for your video description">📋 Copy credit</button></div>
 <p class="by" style="margin-top:8px">Free to use with credit: paste the credit line into your video description. Monetized videos may get a Content ID claim — that's normal, your video stays up.</p>
-{f'<div class="btns">{socbtn}</div>' if socbtn else ''}
+{platblock}
 </div></div>
 <div class="box"><dl><dt>Track</dt><dd>{e(t['t'])}</dd><dt>Artist</dt><dd>BoDleasons (Bohdan Kuzmin)</dd><dt>Genre</dt><dd><a href="/genre/{slug(g)}/">{e(g)}</a></dd>
 <dt>Album</dt><dd>{e(m.get('al', 'Single'))}</dd><dt>Length</dt><dd>{fmt(m.get('dur'))}</dd><dt>Versions</dt><dd>{e(vers)} (no vocals)</dd><dt>License</dt><dd>Free with credit · YouTube Content ID registered</dd></dl></div>
