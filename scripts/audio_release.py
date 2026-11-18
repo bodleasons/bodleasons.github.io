@@ -25,7 +25,7 @@ def main():
     except Exception: done = {}
     if sh("gh", "release", "view", "audio", check=False).returncode != 0:
         sh("gh", "release", "create", "audio", "--title", "Audio for the site player",
-           "--notes", "Streaming copies (128 kbps) for bodleasons.github.io. Free downloads: https://bodleasons.github.io")
+           "--notes", "Streaming copies (128 kbps) for bodleasons.com. Free downloads: https://bodleasons.com")
     # уже загруженные файлы релиза считаем готовыми (если audio.json не успел сохраниться)
     try:
         assets = json.loads(sh("gh", "release", "view", "audio", "--json", "assets").stdout).get("assets", [])

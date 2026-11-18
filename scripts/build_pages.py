@@ -3,7 +3,7 @@
 sitemap.xml, robots.txt. Данные: data/tracks.json, rank.json, meta.json, audio.json, social.json.
 Запускается в GitHub Actions после build_data.py и audio_release.py."""
 import html, json, os, re, datetime
-SITE = "https://bodleasons.github.io"
+SITE = "https://bodleasons.com"
 REL = "https://github.com/bodleasons/bodleasons.github.io/releases/download/audio/"
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 e = lambda s: html.escape(str(s), quote=True)

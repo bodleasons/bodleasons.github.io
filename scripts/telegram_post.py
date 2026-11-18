@@ -5,7 +5,7 @@ MP3 играет прямо в Telegram + обложка + ссылка на с�
 Запускается в GitHub Actions после build_pages.py."""
 import datetime, json, os, re, sys, time, urllib.request, uuid
 from zoneinfo import ZoneInfo
-SITE = "https://bodleasons.github.io"
+SITE = "https://bodleasons.com"
 UA = {"User-Agent": "Mozilla/5.0 (BoDleasons site builder)"}
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
@@ -61,7 +61,7 @@ def main():
                f"✅ Free to use in your videos with credit\n\n"
                f"⬇️ Download MP3 + all edits: {SITE}/t/{s}/\n")
         if social.get(s, {}).get("shorts"): cap += f"🎬 Use in YouTube Shorts: {social[s]['shorts']}\n"
-        cap += (f"\nCredit (tap to copy):\n<code>Music: {t['t']} by BoDleasons — bodleasons.github.io/t/{s}/</code>\n\n"
+        cap += (f"\nCredit (tap to copy):\n<code>Music: {t['t']} by BoDleasons — bodleasons.com/t/{s}/</code>\n\n"
                 f"#BoDleasons {tag} #freemusic")
         try:
             audio = get(f"https://drive.google.com/uc?export=download&id={t['mp3']}")

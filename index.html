@@ -172,7 +172,7 @@ body.hasbar footer{padding-bottom:100px}
         <h3>✅ Free to use with credit</h3>
         <p>Use any track in YouTube videos, Shorts, Reels, TikTok, podcasts and client projects. Just add this to your description:</p>
         <code class="credit" id="creditTpl">Music: [Track name] by BoDleasons
-Free download: https://bodleasons.github.io</code>
+Free download: https://bodleasons.com</code>
         <p>Every track has its own page with a ready-made credit line — press 📋 Copy credit on any track.</p>
         <button class="btn" onclick="copy(document.getElementById('creditTpl').textContent)">Copy credit</button>
       </div>
@@ -230,7 +230,7 @@ const PAGE = 48;
 
 function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1600)}
 function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied ✓'),()=>{prompt('Copy:',t)})}
-function credit(t){return `Music: ${t.t} by BoDleasons\nFree download: https://bodleasons.github.io/t/${slug(t.t)}/`}
+function credit(t){return `Music: ${t.t} by BoDleasons\nFree download: https://bodleasons.com/t/${slug(t.t)}/`}
 
 function edits(id){ const m = META[id]; const n = m && m.v ? m.v.length + 1 : 0; return n > 1 ? n + ' edits' : 'ZIP' }
 function cardGo(e, id){ if(e.target.closest('a,button')) return; location.href = 't/' + id + '/' }
