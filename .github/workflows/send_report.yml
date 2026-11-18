@@ -1,0 +1,44 @@
+name: Send stats report to Telegram
+# Stats report PDF -> Telegram bot "BoDleasons Music" (private chat of the owner).
+# Run with file_id = Google Drive file ID of the PDF (shared "anyone with the link").
+# Run with empty file_id to list private chat IDs that pressed Start.
+on:
+  workflow_dispatch:
+    inputs:
+      file_id:
+        description: 'Google Drive file ID of the PDF (empty = list chat IDs)'
+        required: false
+        default: ''
+      caption:
+        description: 'Caption'
+        required: false
+        default: 'Статистика BoDleasons'
+      chat_id:
+        description: 'Telegram chat ID (empty = default)'
+        required: false
+        default: ''
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send report
+        env:
+          TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          FILE_ID: ${{ inputs.file_id }}
+          CAPTION: ${{ inputs.caption }}
+          CHAT_IN: ${{ inputs.chat_id }}
+          CHAT_DEFAULT: ${{ vars.REPORT_CHAT_ID }}
+        run: |
+          set -e
+          if [ -z "$FILE_ID" ]; then
+            curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" | jq -c '[.result[]? | (.message // .my_chat_member // empty) | select(.chat.type=="private") | .chat.id] | unique'
+            exit 0
+          fi
+          CHAT="${CHAT_IN:-$CHAT_DEFAULT}"
+          [ -n "$CHAT" ] || { echo "no chat id"; exit 1; }
+          curl -sL -o report.pdf "https://drive.google.com/uc?export=download&id=$FILE_ID"
+          head -c 4 report.pdf | grep -q '%PDF' || { echo "download is not a PDF"; exit 1; }
+          NAME="BoDleasons_stats_$(date -u +%Y-%m-%d).pdf"
+          R=$(curl -s -F "chat_id=$CHAT" -F "caption=$CAPTION" -F "document=@report.pdf;filename=$NAME;type=application/pdf" "https://api.telegram.org/bot$TOKEN/sendDocument")
+          echo "$R" | jq -c '{ok, error_code, description}'
+          echo "$R" | jq -e '.ok' > /dev/null
