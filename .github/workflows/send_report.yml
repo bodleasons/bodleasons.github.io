@@ -1,7 +1,7 @@
 name: Send stats report to Telegram
 # Stats report PDF -> Telegram bot "BoDleasons Music" (private chat of the owner).
 # Run with file_id = Google Drive file ID of the PDF (shared "anyone with the link").
-# Run with empty file_id to list private chat IDs that pressed Start.
+# Run with empty file_id to check the bot and list private chat IDs that pressed Start.
 on:
   workflow_dispatch:
     inputs:
@@ -31,7 +31,9 @@ jobs:
         run: |
           set -e
           if [ -z "$FILE_ID" ]; then
-            curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" | jq -c '[.result[]? | (.message // .my_chat_member // empty) | select(.chat.type=="private") | .chat.id] | unique'
+            curl -s "https://api.telegram.org/bot$TOKEN/getMe" | jq -c '{ok, bot: .result.username}'
+            curl -s "https://api.telegram.org/bot$TOKEN/getWebhookInfo" | jq -c '{webhook_set: (.result.url != ""), pending: .result.pending_update_count}'
+            curl -s "https://api.telegram.org/bot$TOKEN/getUpdates" | jq -c '{ok, description, n: (.result|length), types: [.result[]? | (.message // .my_chat_member // .channel_post // empty) | .chat.type], private_ids: ([.result[]? | (.message // .my_chat_member // empty) | select(.chat.type=="private") | .chat.id] | unique)}'
             exit 0
           fi
           CHAT="${CHAT_IN:-$CHAT_DEFAULT}"
