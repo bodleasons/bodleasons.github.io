@@ -14,351 +14,108 @@
 <meta property="og:url" content="https://bodleasons.com/">
 <meta property="og:title" content="BoDleasons — Background Music for Videos | Free with Credit">
 <meta property="og:description" content="Instant MP3 download. Free to use with credit in YouTube, Shorts, Reels and TikTok.">
-<meta name="theme-color" content="#0b0b12">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#0b0b12;--panel:#14141f;--panel2:#1b1b29;--line:#26263a;--text:#ecebf5;--mute:#9a98b3;--a1:#7b5cff;--a2:#ff4fa3;--a3:#ff9a3d;--ok:#3ddc97;--r:16px}
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-a{color:inherit}
-.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
-.grad{background:linear-gradient(90deg,var(--a1),var(--a2),var(--a3));-webkit-background-clip:text;background-clip:text;color:transparent}
-header.top{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(11,11,18,.72);border-bottom:1px solid var(--line)}
-header.top .wrap{display:flex;align-items:center;gap:16px;height:60px}
-.logo{font:700 20px "Space Grotesk",sans-serif;letter-spacing:.5px;text-decoration:none}
-.logo b{font-weight:700}
-nav.links{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
-nav.links a{font-size:13px;text-decoration:none;color:var(--mute);padding:6px 10px;border-radius:999px;border:1px solid transparent}
-nav.links a:hover{color:var(--text);border-color:var(--line)}
-.hero{position:relative;overflow:hidden;padding:72px 0 40px}
-.hero:before{content:"";position:absolute;inset:-40% -10% auto -10%;height:520px;background:radial-gradient(closest-side,rgba(123,92,255,.35),transparent),radial-gradient(closest-side at 70% 40%,rgba(255,79,163,.25),transparent);filter:blur(10px);z-index:-1}
-.eq{display:flex;gap:4px;height:28px;align-items:flex-end;margin-bottom:18px}
-.eq i{width:5px;border-radius:3px;background:linear-gradient(var(--a2),var(--a1));animation:eq 1.1s ease-in-out infinite}
-.eq i:nth-child(2){animation-delay:.15s}.eq i:nth-child(3){animation-delay:.3s}.eq i:nth-child(4){animation-delay:.45s}.eq i:nth-child(5){animation-delay:.6s}
-@keyframes eq{0%,100%{height:20%}50%{height:100%}}
-@media (prefers-reduced-motion:reduce){.eq i{animation:none;height:60%}}
-h1{font:700 clamp(34px,6vw,64px)/1.05 "Space Grotesk",sans-serif;margin:0 0 14px;letter-spacing:-1px}
-.lead{font-size:18px;color:var(--mute);max-width:640px;margin:0 0 26px}
-.stats{display:flex;gap:10px;flex-wrap:wrap}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-size:13px;color:var(--mute)}
-.pill b{color:var(--text)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:600 13px Inter,sans-serif;padding:9px 13px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--text);text-decoration:none;cursor:pointer;white-space:nowrap;transition:transform .12s,border-color .12s,background .12s}
-.btn:hover{border-color:#3a3a58;transform:translateY(-1px)}
-.btn.main{background:linear-gradient(135deg,var(--a1),var(--a2));border:0;color:#fff}
-.btn.soc{background:#102a24;border-color:#1d4a3f}
-.btn.ok{background:var(--ok);color:#06231a;border:0}
-section{padding:26px 0}
-h2{font:700 24px "Space Grotesk",sans-serif;margin:0 0 4px}
-.sub{color:var(--mute);margin:0 0 18px;font-size:14px}
-.new{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,260px);gap:16px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
-.new .card{scroll-snap-align:start}
-.tools{position:sticky;top:60px;z-index:10;background:linear-gradient(var(--bg) 75%,transparent);padding:12px 0 14px}
-.search{display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px 6px 4px 14px}
-.search input{flex:1;background:none;border:0;outline:0;color:var(--text);font:16px Inter,sans-serif;padding:10px 0}
-.chips{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:2px;scrollbar-width:none}.chips::-webkit-scrollbar,.new::-webkit-scrollbar{display:none}
-.chip{flex:none;font-size:13px;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--mute);cursor:pointer}
-.chip.on{background:var(--text);color:var(--bg);border-color:var(--text)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(176px,1fr));gap:12px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
-.card:hover{border-color:#34345a;transform:translateY(-2px)}
-.card.hl{outline:2px solid var(--a2);outline-offset:2px}
-.cv{position:relative;aspect-ratio:1;background:linear-gradient(135deg,#2a1f5c,#5b1f4a 60%,#6a3a1a);overflow:hidden}
-.cv img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s}
-.cv img.ld{opacity:1}
-.cv .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;text-align:center;font:700 20px "Space Grotesk",sans-serif;color:rgba(255,255,255,.85)}
-.cv .play{position:absolute;z-index:2;right:10px;bottom:10px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(11,11,18,.75);backdrop-filter:blur(6px);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s}
-.cv .play:hover{transform:scale(1.08);background:var(--a2)}
-.tag{position:absolute;z-index:2;left:10px;top:10px;font-size:11px;font-weight:600;padding:4px 8px;border-radius:999px;background:rgba(11,11,18,.7);backdrop-filter:blur(6px)}
-.body{padding:9px 9px 10px;display:flex;flex-direction:column;gap:8px;flex:1}
-.card{cursor:pointer}
-.acts .btn{font-size:12px;padding:7px 8px;border-radius:9px}
-.acts .btn svg{flex:none}
-.ed{font-weight:500;opacity:.8}
-.cr{background:transparent;border-color:transparent;color:var(--mute);font-weight:500}.cr:hover{color:var(--text)}
-.ttl{font:600 14px Inter,sans-serif;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ttl a{color:inherit}
-.gen{font-size:12px;color:var(--mute);margin-top:2px}
-.acts{display:grid;grid-template-columns:1fr;gap:6px;margin-top:auto}
-.acts .full{grid-column:1/-1}
-.more{text-align:center;margin:22px 0}
-.empty{color:var(--mute);padding:30px 0;text-align:center}
-.lic{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-.box{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px}
-.box h3{margin:0 0 8px;font:700 16px "Space Grotesk",sans-serif}
-.box p,.box li{color:var(--mute);font-size:14px;margin:0 0 6px}
-.box ul{padding-left:18px;margin:0}
-code.credit{display:block;background:var(--bg);border:1px dashed #3a3a58;border-radius:10px;padding:10px 12px;margin:8px 0;font:13px ui-monospace,Menlo,monospace;color:var(--text);white-space:pre-wrap}
-footer{border-top:1px solid var(--line);margin-top:30px;padding:26px 0 40px;color:var(--mute);font-size:13px}
-footer .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
-.modal{position:fixed;inset:0;z-index:50;background:rgba(5,5,10,.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:18px}
-.modal.on{display:flex}
-.player{width:min(560px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden}
-.player .hd{display:flex;align-items:center;gap:12px;padding:14px}
-.player .hd img{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--panel2)}
-.player .hd .x{margin-left:auto}
-.player iframe{width:100%;height:120px;border:0;background:#000;display:block}
-.player .ft{display:flex;gap:8px;padding:14px;flex-wrap:wrap}
-.bar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(20,20,31,.92);backdrop-filter:blur(16px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .25s}
-.bar.on{transform:none}
-.bar .wrap{display:flex;align-items:center;gap:12px;height:72px}
-.bar img{width:48px;height:48px;border-radius:10px;object-fit:cover;background:var(--panel2)}
-.bar .meta{min-width:0;flex:0 1 220px}.bar .meta .ttl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar .pp{width:44px;height:44px;border-radius:50%;border:0;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none}
-.bar .prog{flex:1;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--mute);min-width:0}
-.bar .track{flex:1;height:6px;border-radius:3px;background:var(--line);cursor:pointer;position:relative;overflow:hidden}
-.bar .track i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--a1),var(--a2))}
-.bar .hint{font-size:11px;color:var(--mute)}
-.card.playing{border-color:var(--a2)}
-.card.playing .play{background:var(--a2)}
-.sortsel{background:var(--panel);color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:6px 10px;font:13px Inter,sans-serif;flex:none}
-.chip.top{border-color:#5a3a7a;color:#ffb3d9}.chip.top.on{background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;border-color:transparent}
-body.hasbar footer{padding-bottom:100px}
-@media (max-width:640px){.bar .prog .tm,.bar .hint,.bar .dl{display:none}.bar .meta{flex:1}}
-.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(30px);opacity:0;background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;transition:.25s;z-index:60}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-@media (max-width:640px){nav.links{display:none}.hero{padding:48px 0 24px}.grid{grid-template-columns:repeat(2,1fr);gap:8px}.acts{grid-template-columns:1fr}.btn{padding:9px 8px;font-size:12px}.body{padding:10px}}
-</style>
+<meta name="theme-color" content="#0d0b16">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=20261121">
 </head>
 <body>
-<header class="top"><div class="wrap">
-  <a class="logo" href="#"><b class="grad">BoDleasons</b> Free Music</a>
-  <nav class="links">
-    <a href="#new">New</a><a href="#all">All tracks</a><a href="#license">How to use</a>
-    <a href="https://www.youtube.com/@bodleasons" target="_blank" rel="noopener">YouTube</a>
-    <a href="https://www.instagram.com/bodleasons/" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://www.tiktok.com/@bodleasons" target="_blank" rel="noopener">TikTok</a>
-    <a href="https://t.me/bodleasons" target="_blank" rel="noopener">Telegram</a>
-  </nav>
+<header><div class="wrap">
+<a class="logo" href="/"><img src="/logo.png" alt="">BoDleasons<span>Free Music</span></a>
+<form class="search desk" action="/" role="search"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="#a39bbd" stroke-width="1.6"/><path d="M11 11l4 4" stroke="#a39bbd" stroke-width="1.6"/></svg><input name="q" id="q" type="search" placeholder="Search a track you heard… (e.g. Lo-Fi Chill)" aria-label="Search tracks" autocomplete="off"></form>
+<nav class="top"><a href="/#all">Music</a><a href="/#genres">Genres</a><a href="/#license">How to use</a><a href="https://t.me/bodleasons" target="_blank" rel="noopener">Telegram</a></nav>
+<a class="icobtn" href="/#search" aria-label="Search"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="#ece8f7" stroke-width="1.6"/><path d="M11 11l4 4" stroke="#ece8f7" stroke-width="1.6"/></svg></a>
 </div></header>
-
-<div class="hero"><div class="wrap">
-  <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-  <h1>Free music for <span class="grad">your next video</span></h1>
-  <p class="lead">Background music for YouTube, Shorts, Reels and TikTok. One click — the MP3 is yours. Every track has short versions for quick edits.</p>
-  <div class="stats">
-    <span class="pill"><b id="nTracks">500+</b> tracks</span>
-    <span class="pill"><b>Free</b> to use with credit</span>
-    <span class="pill"><b>MP3</b> + Full Pack of edits</span>
-  </div>
-</div></div>
-
 <main class="wrap">
-  <section id="new" hidden>
-    <h2>🔥 New this week</h2>
-    <p class="sub">The tracks from our latest videos — the one you just heard is probably here.</p>
-    <div class="new" id="newRow"></div>
-  </section>
-
-  <section id="rel" hidden>
-    <h2>✨ New releases</h2>
-    <p class="sub">Fresh tracks just released on Spotify, Apple Music and YouTube — free to use with credit.</p>
-    <div class="new" id="relRow"></div>
-  </section>
-
-  <section id="all">
-    <h2>Browse the library</h2>
-    <div class="tools">
-      <div class="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--mute)"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="q" type="search" placeholder="Search a track you heard… (e.g. Lo-Fi Chill)" autocomplete="off" aria-label="Search tracks">
-        <select class="sortsel" id="sort" aria-label="Sort"><option value="pop">Popular first</option><option value="az">A → Z</option></select><span class="pill" id="count" style="padding:6px 10px">…</span>
-      </div>
-      <div class="chips" id="chips"></div>
-    </div>
-    <div class="grid" id="grid"></div>
-    <div class="empty" id="empty" hidden>Nothing found. Try another word or genre.</div>
-    <div class="more"><button class="btn" id="moreBtn" hidden>Show more</button></div>
-  </section>
-
-  <section id="license">
-    <h2>How to use the music</h2>
-    <p class="sub">Simple rules — so you never have problems with your videos.</p>
-    <div class="lic">
-      <div class="box">
-        <h3>✅ Free to use with credit</h3>
-        <p>Use any track in YouTube videos, Shorts, Reels, TikTok, podcasts and client projects. Just add this to your description:</p>
-        <code class="credit" id="creditTpl">Music: [Track name] by BoDleasons
-Free download: https://bodleasons.com</code>
-        <p>Every track has its own page with a ready-made credit line — press 📋 Copy credit on any track.</p>
-        <button class="btn" onclick="copy(document.getElementById('creditTpl').textContent)">Copy credit</button>
-      </div>
-      <div class="box">
-        <h3>ℹ️ YouTube Content ID</h3>
-        <p>Tracks are registered in YouTube Content ID. A claim is <b>not a strike</b> — your video stays online.</p>
-        <p>Want the claim released or need a commercial license? Email the video link to <a href="mailto:bodleason.make@gmail.com">bodleason.make@gmail.com</a>.</p>
-      </div>
-      <div class="box">
-        <h3>🚫 Please don't</h3>
-        <ul><li>re-upload or sell the music itself;</li><li>claim it as your own;</li><li>register it in Content ID or any fingerprinting system.</li></ul>
-      </div>
-    </div>
-  </section>
+<div class="hero"><div><h1>Free music for <span class="grad">your next video</span></h1><p>Background music for YouTube, Shorts, Reels and TikTok. One click — the MP3 is yours. Every track has short edits for quick cuts.</p></div>
+<div class="pills"><span class="pill"><b id="nTracks">574</b> tracks</span><span class="pill"><b>Free</b> with credit</span><span class="pill"><b>MP3</b> + all edits in ZIP</span></div></div>
+<label class="search mob" id="search"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="#a39bbd" stroke-width="1.6"/><path d="M11 11l4 4" stroke="#a39bbd" stroke-width="1.6"/></svg><input id="q2" type="search" placeholder="Search tracks…" aria-label="Search tracks" autocomplete="off"></label>
+<section id="genres"><div class="sech"><h2>Browse by genre</h2><a href="#all">All tracks ↓</a></div><div class="cols" id="cols"></div></section>
+<section id="newsec" hidden><div class="sech"><div class="tabs2" id="ntabs"></div></div><div class="news" id="news"></div></section>
+<section id="all"><div class="sech"><h2>All music</h2></div>
+<div class="tools"><div class="chips" id="chips"></div><select id="sort" aria-label="Sort"><option value="pop">Popular first</option><option value="az">A → Z</option><option value="short">Shortest first</option></select><span class="count" id="count">…</span></div>
+<div class="list" id="list"></div>
+<p class="empty" id="empty" hidden style="color:var(--mute);padding:20px 0">Nothing found. Try another word or genre.</p>
+<div class="more"><button class="btn" id="more" hidden>Show more</button></div></section>
+<section id="license"><div class="sech"><h2>How to use the music</h2></div><div class="lic">
+<div class="box"><h3>✅ Free to use with credit</h3><p>Use any track in YouTube videos, Shorts, Reels, TikTok, podcasts and client projects. Just add this to your description:</p><code class="credit">Music: [Track name] by BoDleasons
+Free download: https://bodleasons.com/t/[track]/</code><p>Every track has a ready credit line with its own link — press <b style="color:#fff">Copy credit</b> on any track.</p></div>
+<div class="box"><h3>ℹ️ YouTube Content ID</h3><p>Tracks are registered in YouTube Content ID. A claim is <b style="color:#fff">not a strike</b> — your video stays online.</p><p>Want the claim released or need a commercial license? Email the video link to <a href="mailto:bodleason.make@gmail.com" style="text-decoration:underline">bodleason.make@gmail.com</a>.</p></div>
+<div class="box"><h3>🚫 Please don't</h3><ul style="margin:0;padding-left:18px"><li>re-upload or sell the music itself;</li><li>claim it as your own;</li><li>register it in Content ID or any fingerprinting system.</li></ul></div>
+</div></section>
 </main>
-
-<footer><div class="wrap">
-  <span>© BoDleasons — music by Bohdan Kuzmin</span>
-  <span style="display:flex;gap:8px;flex-wrap:wrap">
-    <a class="btn" href="https://t.me/bodleasons" target="_blank" rel="noopener">✈️ Telegram</a>
-    <a class="btn" href="https://fanlink.tv/BDfn" target="_blank" rel="noopener">🎧 Stream</a>
-    <a class="btn" href="https://www.paypal.com/donate/?hosted_button_id=PZHDXKT7N2G76" target="_blank" rel="noopener">☕ Support</a>
-    <a class="btn" href="mailto:bodleason.make@gmail.com">✉️ Licensing</a>
-  </span>
+<footer><div class="wrap" style="display:block">
+<div class="ftop"><div style="flex:1 1 520px"><h4>Follow BoDleasons</h4><div class="follow"><a href="https://www.youtube.com/@bodleasons" target="_blank" rel="noopener" data-gc="follow-yt"><svg viewBox="0 0 24 24" aria-hidden="true"><rect y="4" width="24" height="16" rx="5" fill="#ff0000"/><path d="M10 8.5v7l6-3.5z" fill="#fff"/></svg><span>YouTube</span></a><a href="https://open.spotify.com/artist/6rcXZpBn9xgjCFcA6lPLm1" target="_blank" rel="noopener" data-gc="follow-sp"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#1DB954"/><path d="M7 9.5c3.5-1 7-.6 10 1M7.5 12.5c3-.8 5.8-.5 8.5 1M8 15.3c2.4-.6 4.6-.4 6.6.8" stroke="#000" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg><span>Spotify</span></a><a href="https://music.apple.com/artist/bodleasons/1585254075" target="_blank" rel="noopener" data-gc="follow-ap"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#fa2d48"/><path d="M15.5 6v8.2a2.3 2.3 0 1 1-1.3-2.1V8.3l-5 1.2v6.2a2.3 2.3 0 1 1-1.3-2.1V8.4z" fill="#fff"/></svg><span>Apple Music</span></a><a href="https://music.youtube.com/channel/UCUy2KBrbyYU1f1QccHY_KgA" target="_blank" rel="noopener" data-gc="follow-ytm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#ff0000"/><circle cx="12" cy="12" r="5.5" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M10.5 9.5v5l4-2.5z" fill="#fff"/></svg><span>YouTube Music</span></a><a href="https://www.instagram.com/bodleasons/" target="_blank" rel="noopener" data-gc="follow-ig"><svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#e1306c" stroke="none"/></svg><span>Instagram</span></a><a href="https://www.tiktok.com/@bodleasons" target="_blank" rel="noopener" data-gc="follow-tt"><svg viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M14 3h3a4 4 0 0 0 4 4v3a7 7 0 0 1-4-1.3V15a6 6 0 1 1-6-6v3a3 3 0 1 0 3 3z"/></svg><span>TikTok</span></a><a href="https://t.me/bodleasons" target="_blank" rel="noopener" data-gc="follow-tg"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#29a9eb"/><path d="M5.5 11.8l11.6-4.5c.5-.2 1 .1.8.9l-2 9.3c-.1.6-.5.8-1 .5l-3-2.2-1.5 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5c.2-.2 0-.3-.3-.1l-6.9 4.3-3-.9c-.6-.2-.6-.6.1-.9z" fill="#fff"/></svg><span>Telegram</span></a><a href="https://www.facebook.com/profile.php?id=61595615733055" target="_blank" rel="noopener" data-gc="follow-fb"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#1877f2"/><path d="M13.2 19v-5.8h2l.3-2.3h-2.3V9.5c0-.7.2-1.1 1.1-1.1h1.2V6.3a16 16 0 0 0-1.8-.1c-1.8 0-3 1.1-3 3.1v1.6H8.8v2.3h1.9V19z" fill="#fff"/></svg><span>Facebook</span></a><a href="https://soundcloud.com/bogdan-kuzmin-7298004" target="_blank" rel="noopener" data-gc="follow-sc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 15.5a2 2 0 0 1 2-2h.3M4.3 17V12M6 17v-6M7.7 17V9.5M9.4 17V9M11 17V8.5" stroke="#ff5500" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M12.5 17V8a5 5 0 0 1 8.4 3.2A3 3 0 0 1 20.5 17z" fill="#ff5500"/></svg><span>SoundCloud</span></a><a href="https://pixabay.com/users/bodleasons-28047609/" target="_blank" rel="noopener" data-gc="follow-px"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#00ab6c"/><text x="12" y="16.5" font-size="11" font-weight="700" text-anchor="middle" fill="#fff" font-family="Arial">px</text></svg><span>Pixabay</span></a><a href="https://freemusicarchive.org/music/bodleasons/" target="_blank" rel="noopener" data-gc="follow-fma"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#e5e5e5"/><text x="12" y="15.5" font-size="8.5" font-weight="700" text-anchor="middle" fill="#111" font-family="Arial">FMA</text></svg><span>FMA</span></a><a href="https://artlist.io/royalty-free-music/artist/bodleasons/3724" target="_blank" rel="noopener" data-gc="follow-al"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#ffd400"/><path d="M12 5.5l5.2 13h-2.4l-1.1-2.9H10.3l-1.1 2.9H6.8zm-1 8h2l-1-2.7z" fill="#111"/></svg><span>Artlist</span></a></div></div>
+<div class="fside"><h4>Support &amp; licensing</h4><div class="row2"><a class="btn" href="https://fanlink.tv/BDfn" target="_blank" rel="noopener">🎧 Stream</a><a class="btn" href="https://www.paypal.com/donate/?hosted_button_id=PZHDXKT7N2G76" target="_blank" rel="noopener">☕ Support</a><a class="btn" href="mailto:bodleason.make@gmail.com">✉️ Licensing</a></div>
+<p style="margin:4px 0 0;font-size:13px">Commercial license or claim release: <a href="mailto:bodleason.make@gmail.com" style="text-decoration:underline">bodleason.make@gmail.com</a></p></div></div>
+<div class="fbot"><span>© BoDleasons — music by Bohdan Kuzmin</span><span><a href="/">574+ free tracks</a> · <a href="/#license">How to use</a></span></div>
 </div></footer>
-
-<div class="modal" id="modal" role="dialog" aria-modal="true" onclick="if(event.target===this)closeP()">
-  <div class="player">
-    <div class="hd"><img id="pCover" alt=""><div><div class="ttl" id="pTitle"></div><div class="gen" id="pGenre"></div></div><button class="btn x" onclick="closeP()" aria-label="Close">✕</button></div>
-    <iframe id="pFrame" allow="autoplay" title="Player"></iframe>
-    <div class="ft" id="pActs"></div>
-  </div>
-</div>
-<div class="bar" id="bar"><div class="wrap">
-  <button class="pp" id="bPP" aria-label="Play/Pause"><svg id="bIco" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-  <img id="bCover" alt="">
-  <div class="meta"><div class="ttl" id="bTitle"></div><div class="hint" id="bHint">Preview · full track in MP3</div></div>
-  <div class="prog"><span class="tm" id="bCur">0:00</span><div class="track" id="bTrack"><i id="bFill"></i></div><span class="tm" id="bDur">1:00</span></div>
-  <a class="btn main dl" id="bDl" href="#" data-gc="mp3">⬇ Free Download MP3</a>
-  <button class="btn" onclick="stopBar()" aria-label="Close player">✕</button>
-</div></div>
-<audio id="aud" preload="none"></audio>
-<div class="toast" id="toast"></div>
-
+<script src="/assets/site.js?v=20261121"></script>
 <script>
-const DL = id => 'https://drive.google.com/uc?export=download&id=' + id;
-const REL = 'https://github.com/bodleasons/bodleasons.github.io/releases/download/audio/';
-let AUDIO = {}, SOCIAL = {};
-const TH = id => 'https://lh3.googleusercontent.com/d/' + id + '=w500';
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-let META = {}; let ALL = [], VIEW = [], shown = 0, genre = 'Top 100', RANK = {}, CUR = null;
-const rk = t => RANK[t.t] || 1e9;
-const PAGE = 48;
-
-function toast(t){const e=document.getElementById('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1600)}
-function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Copied ✓'),()=>{prompt('Copy:',t)})}
-function credit(t){return `Music: ${t.t} by BoDleasons\nFree download: https://bodleasons.com/t/${slug(t.t)}/`}
-
-function edits(id){ const m = META[id]; const n = m && m.v ? m.v.length + 1 : 0; return n > 1 ? n + ' edits' : 'ZIP' }
-function cardGo(e, id){ if(e.target.closest('a,button')) return; location.href = 't/' + id + '/' }
-function card(t, big){
-  const id = slug(t.t);
-  return `<article class="card" id="${id}" onclick="cardGo(event,'${id}')">
-    <div class="cv">
-      <div class="ph">${esc(t.t)}</div>
-      ${t.cover ? `<img loading="lazy" src="${TH(t.cover)}" alt="${esc(t.t)} cover" onload="this.classList.add('ld')" onerror="this.remove()">` : ''}
-      ${big && t.when ? `<span class="tag">${esc(t.when)}</span>` : ''}
-      <button class="play" title="Listen" aria-label="Listen to ${esc(t.t)}" onclick="play('${id}')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
-    </div>
-    <div class="body">
-      <div><h3 class="ttl" title="${esc(t.t)}"><a href="t/${id}/" style="text-decoration:none">${esc(t.t)}</a></h3><div class="gen">${esc(t.g)}</div></div>
-      <div class="acts">
-        <a class="btn main" href="${DL(t.mp3)}" rel="nofollow" data-gc="mp3">⬇ Free Download MP3</a>
-        ${t.zip ? `<a class="btn zipb" href="${DL(t.zip)}" rel="nofollow" data-gc="zip" title="ZIP: full track + all short edits, ready for Shorts, Reels and ads">📦 Full Pack <span class="ed">· ${edits(id)}</span></a>` : ''}
-        ${SOCIAL[id] && SOCIAL[id].shorts ? `<a class="btn soc" href="${SOCIAL[id].shorts}" target="_blank" rel="noopener" title="Open this sound in YouTube Shorts"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.7 15.1V8.9l5.8 3.1z"/></svg> Use in YT Shorts</a>` : ''}
-        <button class="btn cr" title="Copies a ready credit line for your video description" onclick="copy(credit(ALL.find(x=>slug(x.t)==='${id}')))">📋 Copy credit</button>
-      </div>
-    </div>
-  </article>`;
-}
-
-const aud = document.getElementById('aud');
-function fmt(s){ s = Math.max(0, Math.floor(s||0)); return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0') }
-function ico(p){ document.getElementById('bIco').innerHTML = p ? '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>' : '<path d="M8 5v14l11-7z"/>' }
-function markPlaying(){ document.querySelectorAll('.card.playing').forEach(c => c.classList.remove('playing')); if(CUR) document.querySelectorAll('[id="'+slug(CUR.t)+'"]').forEach(c => c.classList.add('playing')) }
-function play(id){
-  const t = ALL.find(x => slug(x.t) === id); if(!t) return;
-  if(window.goatcounter && goatcounter.count) goatcounter.count({path:'play/'+id, title:'play: '+t.t, event:true});
-  if(!t.p && !AUDIO[id]) return openP(id);                       // нет превью — плеер Google Drive
-  if(CUR && CUR.t === t.t){ aud.paused ? aud.play() : aud.pause(); return }
-  CUR = t; const full = !!AUDIO[id]; aud.src = full ? REL + id + '.mp3' : 'previews/' + id + '.mp3'; aud.onerror = () => { if (full && !aud.src.includes('previews/')) { aud.src = 'previews/' + id + '.mp3'; aud.play().catch(()=>{}); } }; aud.play().catch(()=>{});
-  document.getElementById('bHint').textContent = full ? 'Full track · by BoDleasons' : 'Preview · full track in MP3';
-  document.getElementById('bTitle').textContent = t.t;
-  document.getElementById('bCover').src = t.cover ? TH(t.cover) : '';
-  document.getElementById('bDl').href = DL(t.mp3);
-  document.getElementById('bar').classList.add('on'); document.body.classList.add('hasbar'); markPlaying();
-}
-function stopBar(){ aud.pause(); CUR = null; document.getElementById('bar').classList.remove('on'); document.body.classList.remove('hasbar'); markPlaying() }
-aud.addEventListener('play', () => ico(true)); aud.addEventListener('pause', () => ico(false));
-aud.addEventListener('timeupdate', () => { document.getElementById('bCur').textContent = fmt(aud.currentTime); document.getElementById('bDur').textContent = fmt(aud.duration || 60); document.getElementById('bFill').style.width = (100 * aud.currentTime / (aud.duration || 60)) + '%' });
-aud.addEventListener('ended', () => ico(false));
-document.getElementById('bPP').onclick = () => CUR && (aud.paused ? aud.play() : aud.pause());
-document.getElementById('bTrack').onclick = e => { const r = e.currentTarget.getBoundingClientRect(); if(aud.duration) aud.currentTime = aud.duration * (e.clientX - r.left) / r.width };
-function openP(id){
-  const t = ALL.find(x => slug(x.t) === id); if(!t) return;
-  document.getElementById('pTitle').textContent = t.t;
-  document.getElementById('pGenre').textContent = t.g + ' · by BoDleasons';
-  const c = document.getElementById('pCover'); c.src = t.cover ? TH(t.cover) : '';
-  document.getElementById('pFrame').src = 'https://drive.google.com/file/d/' + t.mp3 + '/preview';
-  document.getElementById('pActs').innerHTML = `<a class="btn main" href="${DL(t.mp3)}" data-gc="mp3">⬇ Free Download MP3</a>` + (t.zip ? `<a class="btn" href="${DL(t.zip)}" data-gc="zip">📦 Full Pack · ${edits(id)}</a>` : '') + `<button class="btn" onclick="copy(credit(ALL.find(x=>slug(x.t)==='${id}')))">📋 Copy credit</button>`;
-  document.getElementById('modal').classList.add('on');
-}
-function closeP(){document.getElementById('modal').classList.remove('on');document.getElementById('pFrame').src='about:blank'}
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeP() });
-
-function render(reset){
-  const q = document.getElementById('q').value.trim().toLowerCase();
-  if(reset){
-    const pop = document.getElementById('sort').value === 'pop';
-    if(genre === 'Top 100' && !q) VIEW = [...ALL].filter(t => RANK[t.t]).sort((a,b) => rk(a) - rk(b)).slice(0, 100);
-    else VIEW = ALL.filter(t => (genre==='All' || genre==='Top 100' || t.g===genre) && (!q || (t.t + ' ' + t.g).toLowerCase().includes(q)));
-    if(pop) VIEW.sort((a,b) => rk(a) - rk(b) || a.t.localeCompare(b.t)); else VIEW.sort((a,b) => a.t.localeCompare(b.t));
-    if(q) VIEW.sort((a,b) => (b.t.toLowerCase().startsWith(q)) - (a.t.toLowerCase().startsWith(q)));
-    shown = 0; document.getElementById('grid').innerHTML = '';
-  }
-  const next = VIEW.slice(shown, shown + PAGE); shown += next.length;
-  document.getElementById('grid').insertAdjacentHTML('beforeend', next.map(t => card(t)).join(''));
-  markPlaying();
-  document.getElementById('count').textContent = VIEW.length + ' tracks';
-  document.getElementById('empty').hidden = VIEW.length > 0;
-  document.getElementById('moreBtn').hidden = shown >= VIEW.length;
-}
-
+(function(){
+const {slug,esc,fmt,DL,TH,I,TR,GORDER,rowHTML,mark,REL}=window.BOD;
+const PAGE=40; let ALL=[],VIEW=[],shown=0,G='__top',RANK={},META={},NEWL=[],RELL=[],SORT='pop',NT='week';
+const rk=t=>RANK[t.t]||1e9;
+const short=g=>g.split(',')[0];
+const $=id=>document.getElementById(id);
+function q(){return (($('q2')||{}).value||'').trim().toLowerCase()}
+function genres(){return GORDER.filter(g=>ALL.some(t=>t.g===g)).concat([...new Set(ALL.map(t=>t.g))].filter(g=>!GORDER.includes(g)))}
 function chips(){
-  const sc = {}; ALL.forEach(t => { sc[t.g] = (sc[t.g]||0) + (RANK[t.t] ? 1000/(RANK[t.t]+10) : 0.01) });
-  const gs = ['All', 'Top 100', ...[...new Set(ALL.map(t => t.g))].sort((a,b) => sc[b] - sc[a])];
-  const lbl = g => g==='All' ? 'All · ' + ALL.length : g==='Top 100' ? '🔥 Top 100' : g + ' · ' + ALL.filter(t=>t.g===g).length;
-  document.getElementById('chips').innerHTML = gs.filter(g => g!=='Top 100' || Object.keys(RANK).length).map(g => `<button class="chip ${g==='Top 100'?'top':''} ${g===genre?'on':''}" data-g="${esc(g)}">${esc(lbl(g))}</button>`).join('');
-  document.querySelectorAll('.chip').forEach(b => b.onclick = () => { genre = b.dataset.g; chips(); render(true); });
+  const gs=genres(), n=g=>ALL.filter(t=>t.g===g).length;
+  $('chips').innerHTML=`<button class="chip ${G==='__top'?'on':''}" data-g="__top">🔥 Top 100</button><button class="chip ${G==='__all'?'on':''}" data-g="__all">All<small>${ALL.length}</small></button>`+gs.map(g=>`<button class="chip ${G===g?'on':''}" data-g="${esc(g)}">${esc(short(g))}<small>${n(g)}</small></button>`).join('');
 }
-
-function newWeek(list){
-  const now = new Date(), week = 7*864e5, seen = new Set(), out = [];
-  (list||[]).map(x => ({...x, d: new Date(x.date + 'T' + (x.time || '12:00') + ':00')}))
-    .filter(x => x.d <= now && now - x.d < week).sort((a,b) => b.d - a.d)
-    .forEach(x => { const t = ALL.find(y => slug(y.t) === slug(x.track)); if(t && !seen.has(t.t)){ seen.add(t.t); out.push({...t, when: x.d.toDateString()===now.toDateString() ? 'Today' : x.d.toLocaleDateString('en-US',{weekday:'short'})}) } });
-  if(out.length){ document.getElementById('new').hidden = false; document.getElementById('newRow').innerHTML = out.map(t => card(t, true)).join(''); }
+function render(reset){
+  const qq=q();
+  if(reset){
+    if(G==='__top'&&!qq) VIEW=ALL.filter(t=>RANK[t.t]).sort((a,b)=>rk(a)-rk(b)).slice(0,100);
+    else VIEW=ALL.filter(t=>(G==='__all'||G==='__top'||t.g===G)&&(!qq||(t.t+' '+t.g).toLowerCase().includes(qq)));
+    if(SORT==='az') VIEW.sort((a,b)=>a.t.localeCompare(b.t)); else if(SORT==='short') VIEW.sort((a,b)=>(a.d||999)-(b.d||999)); else if(!(G==='__top'&&!qq)) VIEW.sort((a,b)=>rk(a)-rk(b)||a.t.localeCompare(b.t));
+    if(qq) VIEW.sort((a,b)=>(b.t.toLowerCase().startsWith(qq))-(a.t.toLowerCase().startsWith(qq)));
+    shown=0; $('list').innerHTML='';
+  }
+  const next=VIEW.slice(shown,shown+PAGE); shown+=next.length;
+  $('list').insertAdjacentHTML('beforeend',next.map(rowHTML).join('')); window.BOD.hydrate($('list'));
+  $('count').textContent=VIEW.length+' tracks';
+  $('empty').hidden=VIEW.length>0; $('more').hidden=shown>=VIEW.length; mark();
 }
-
-function newRel(){
-  const out = ALL.filter(t => META[slug(t.t)] && META[slug(t.t)].rd).sort((a,b) => META[slug(b.t)].rd.localeCompare(META[slug(a.t)].rd)).slice(0, 12)
-    .map(t => ({...t, when: new Date(META[slug(t.t)].rd + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'})}));
-  if(out.length){ document.getElementById('rel').hidden = false; document.getElementById('relRow').innerHTML = out.map(t => card(t, true)).join(''); }
+function genreCards(){
+  $('cols').innerHTML=genres().slice(0,6).map(g=>{const t=ALL.filter(x=>x.g===g).sort((a,b)=>rk(a)-rk(b))[0];return `<a class="col" href="/genre/${slug(g)}/"><div class="im"><img loading="lazy" src="${TH(t.cover,400)}" alt=""><b>${esc(short(g))}</b></div><small>${ALL.filter(x=>x.g===g).length} tracks</small></a>`}).join('');
+}
+function newCards(list){return list.map(t=>`<div class="nc" data-s="${t.s}"><div class="im"><img loading="lazy" src="${TH(t.cover,400)}" alt="${esc(t.t)} cover"><span class="when">${esc(t.when)}</span><button class="pb" data-play="${t.s}" aria-label="Play ${esc(t.t)}">${I.play}</button></div><a class="t" href="/t/${t.s}/">${esc(t.t)}</a><small>${esc(short(t.g))} · ${fmt(t.d)}</small></div>`).join('')}
+function newBlock(){
+  const has=NEWL.length||RELL.length; $('newsec').hidden=!has; if(!has) return;
+  if(!NEWL.length) NT='rel';
+  $('ntabs').innerHTML=(NEWL.length?`<button class="chip ${NT==='week'?'on':''}" data-nt="week">🔥 New this week</button>`:'')+(RELL.length?`<button class="chip ${NT==='rel'?'on':''}" data-nt="rel">✨ New releases</button>`:'');
+  $('news').innerHTML=newCards(NT==='week'?NEWL:RELL); mark();
 }
 async function init(){
-  const [tracks, nw, rank, au, so, me] = await Promise.all([
-    fetch('data/tracks.json', {cache:'no-cache'}).then(r => r.json()),
-    fetch('data/new.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : []).catch(() => []),
-    fetch('data/rank.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-    fetch('data/audio.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-    fetch('data/social.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({})),
-    fetch('data/meta.json', {cache:'no-cache'}).then(r => r.ok ? r.json() : {}).catch(() => ({}))
-  ]);
-  ALL = tracks; RANK = rank || {}; AUDIO = au || {}; SOCIAL = so || {}; META = me || {}; if(!Object.keys(RANK).length) genre = 'All'; document.getElementById('nTracks').textContent = ALL.length;
-  newWeek(nw); newRel(); chips(); render(true);
-  document.getElementById('q').addEventListener('input', () => render(true));
-  document.getElementById('moreBtn').onclick = () => render(false);
-  document.getElementById('sort').onchange = () => render(true);
-  const h = decodeURIComponent(location.hash.slice(1));
-  if(h && !['new','all','license'].includes(h)){
-    const t = ALL.find(x => slug(x.t) === h);
-    if(t){ genre = 'All'; chips(); document.getElementById('q').value = t.t; render(true); setTimeout(() => { const e = document.getElementById(h); if(e){ e.classList.add('hl'); e.scrollIntoView({behavior:'smooth', block:'center'}); } }, 50); }
-  }
+  const get=(n,d)=>fetch('/data/'+n+'.json',{cache:'no-cache'}).then(r=>r.ok?r.json():d).catch(()=>d);
+  const [tracks,nw,rank,au,so,me,wv]=await Promise.all([get('tracks',[]),get('new',[]),get('rank',{}),get('audio',{}),get('social',{}),get('meta',{}),get('wave',{})]);
+  RANK=rank||{}; META=me||{};
+  ALL=tracks.map(t=>{const s=slug(t.t),w=wv[s]||{},m=META[s]||{};const x={s,t:t.t,g:t.g,mp3:t.mp3,zip:t.zip||'',cover:t.cover||'',d:w.d||m.dur||0,v:w.v||(m.v||[]).map(v=>[v.replace(' Version',''),0]),p:w.p||'',sh:(so[s]||{}).shorts||'',src:au[s]?REL+s+'.mp3':(t.p?'/previews/'+s+'.mp3':''),rd:m.rd||''};TR[s]=x;return x});
+  if(!Object.keys(RANK).length) G='__all';
+  $('nTracks').textContent=ALL.length;
+  const now=new Date(),week=7*864e5,seen=new Set();
+  (nw||[]).map(x=>({...x,dd:new Date(x.date+'T'+(x.time||'12:00')+':00')})).filter(x=>x.dd<=now&&now-x.dd<week).sort((a,b)=>b.dd-a.dd)
+    .forEach(x=>{const t=ALL.find(y=>y.s===slug(x.track));if(t&&!seen.has(t.s)){seen.add(t.s);NEWL.push({...t,when:x.dd.toDateString()===now.toDateString()?'Today':x.dd.toLocaleDateString('en-US',{weekday:'short'})})}});
+  RELL=ALL.filter(t=>t.rd).sort((a,b)=>b.rd.localeCompare(a.rd)).slice(0,12).map(t=>({...t,when:new Date(t.rd+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}));
+  const qs=new URLSearchParams(location.search).get('q'); if(qs){ $('q2').value=qs; G='__all'; }
+  genreCards(); newBlock(); chips(); render(true);
+  $('q2').addEventListener('input',()=>{ if(q()&&G==='__top'){G='__all';chips()} render(true) });
+  if($('q')){ $('q').value=qs||''; $('q').closest('form').addEventListener('submit',ev=>{ev.preventDefault();$('q2').value=$('q').value;G='__all';chips();render(true);$('all').scrollIntoView({behavior:'smooth'})}); $('q').addEventListener('input',()=>{$('q2').value=$('q').value;if(G==='__top'){G='__all';chips()}render(true)}) }
+  $('sort').onchange=e=>{SORT=e.target.value;render(true)};
+  $('more').onclick=()=>render(false);
+  document.addEventListener('click',e=>{const c=e.target.closest('[data-g]');if(c){G=c.dataset.g;chips();render(true);return} const n=e.target.closest('[data-nt]');if(n){NT=n.dataset.nt;newBlock()}});
+  const h=decodeURIComponent(location.hash.slice(1));
+  if(h==='search'){ setTimeout(()=>{$('q2').scrollIntoView({block:'center'});$('q2').focus()},80) }
+  else if(h&&!['new','all','license','genres'].includes(h)){ const t=ALL.find(x=>x.s===h); if(t){ G='__all'; chips(); $('q2').value=t.t; render(true); setTimeout(()=>{const r=$(h); if(r){r.classList.add('hl');r.scrollIntoView({behavior:'smooth',block:'center'})}},80) } }
+  else if(h){ setTimeout(()=>{const x=$(h); if(x) x.scrollIntoView()},80) }
 }
 init();
+})();
 </script>
 <script data-goatcounter="https://bodleasons.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(!a||!window.goatcounter||!goatcounter.count)return;var h=a.href||'',n=null;
-if(h.indexOf('drive.google.com/uc')>-1)n=(a.dataset.gc==='zip'||a.textContent.indexOf('Full Pack')>-1?'zip':'mp3');else if(h.indexOf('youtube.com/source')>-1)n='use-shorts';else if(h.indexOf('t.me/')>-1)n='telegram';
-if(n){var t=(document.querySelector('h1')&&location.pathname.indexOf('/t/')===0)?document.querySelector('h1').textContent:((a.closest('.card')||{}).id||(window.CUR&&CUR.t)||'');goatcounter.count({path:n+'/'+t,title:n+': '+t,event:true})}},true);</script>
+if(h.indexOf('drive.google.com/uc')>-1)n=(a.dataset.gc==='zip'?'zip':'mp3');else if(h.indexOf('youtube.com/source')>-1)n='use-shorts';else if(h.indexOf('t.me/')>-1)n='telegram';else if(a.dataset.gc&&a.dataset.gc.indexOf('follow-')===0)n=a.dataset.gc;
+if(n){var r=a.closest('.row,.nc');var t=r?(r.dataset.s||r.id):((document.querySelector('h1')&&location.pathname.indexOf('/t/')===0)?document.querySelector('h1').textContent:'');goatcounter.count({path:n+'/'+t,title:n+': '+t,event:true})}},true);</script>
 </body>
 </html>
