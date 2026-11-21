@@ -187,3 +187,6 @@ footer{padding-top:30px}
 .fbot{border-top:1px solid var(--line);padding-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between}
 @media (max-width:1100px){.follow{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (max-width:760px){.follow{grid-template-columns:repeat(2,minmax(0,1fr))}.news{display:flex;overflow-x:auto;scrollbar-width:none}.news::-webkit-scrollbar{display:none}.nc{flex:0 0 140px}}
+.follow{grid-template-columns:repeat(6,minmax(0,1fr));max-width:none}
+@media (max-width:1100px){.follow{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.follow{grid-template-columns:repeat(2,minmax(0,1fr))}}

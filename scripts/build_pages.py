@@ -6,7 +6,7 @@ sitemap.xml, robots.txt. Данные: data/tracks.json, rank.json, meta.json, a
 import html, json, os, re, datetime
 SITE = "https://bodleasons.com"
 REL = "https://github.com/bodleasons/bodleasons.github.io/releases/download/audio/"
-ASSET_V = "20261121b"
+ASSET_V = "20261121c"
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 e = lambda s: html.escape(str(s), quote=True)
 DL = lambda i: f"https://drive.google.com/uc?export=download&id={i}"
@@ -42,14 +42,12 @@ ICO = {"sp": '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12
        "sc": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 15.5a2 2 0 0 1 2-2h.3M4.3 17V12M6 17v-6M7.7 17V9.5M9.4 17V9M11 17V8.5" stroke="#ff5500" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M12.5 17V8a5 5 0 0 1 8.4 3.2A3 3 0 0 1 20.5 17z" fill="#ff5500"/></svg>',
        "px": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#00ab6c"/><text x="12" y="16.5" font-size="11" font-weight="700" text-anchor="middle" fill="#fff" font-family="Arial">px</text></svg>',
        "fma": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#e5e5e5"/><text x="12" y="15.5" font-size="8.5" font-weight="700" text-anchor="middle" fill="#111" font-family="Arial">FMA</text></svg>',
+       "gm": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2.5" fill="#fff"/><path d="M2.5 6.5l9.5 7 9.5-7" fill="none" stroke="#ea4335" stroke-width="2"/></svg>',
        "al": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#ffd400"/><path d="M12 5.5l5.2 13h-2.4l-1.1-2.9H10.3l-1.1 2.9H6.8zm-1 8h2l-1-2.7z" fill="#111"/></svg>'}
 
-SOCIALS = [("yt", "YouTube", "https://www.youtube.com/@bodleasons"), ("sp", "Spotify", "https://open.spotify.com/artist/6rcXZpBn9xgjCFcA6lPLm1"),
-           ("ap", "Apple Music", "https://music.apple.com/artist/bodleasons/1585254075"), ("ytm", "YouTube Music", "https://music.youtube.com/channel/UCUy2KBrbyYU1f1QccHY_KgA"),
-           ("ig", "Instagram", "https://www.instagram.com/bodleasons/"), ("tt", "TikTok", "https://www.tiktok.com/@bodleasons"),
-           ("tg", "Telegram", "https://t.me/bodleasons"), ("fb", "Facebook", "https://www.facebook.com/profile.php?id=61595615733055"),
-           ("sc", "SoundCloud", "https://soundcloud.com/bogdan-kuzmin-7298004"), ("px", "Pixabay", "https://pixabay.com/users/bodleasons-28047609/"),
-           ("fma", "FMA", "https://freemusicarchive.org/music/bodleasons/"), ("al", "Artlist", "https://artlist.io/royalty-free-music/artist/bodleasons/3724")]
+SOCIALS = [("yt", "YouTube", "https://www.youtube.com/@bodleasons"), ("ig", "Instagram", "https://www.instagram.com/bodleasons/"),
+           ("tt", "TikTok", "https://www.tiktok.com/@bodleasons"), ("fb", "Facebook", "https://www.facebook.com/profile.php?id=61595615733055"),
+           ("tg", "Telegram", "https://t.me/bodleasons"), ("gm", "Email", "mailto:bodleason.make@gmail.com")]
 
 SEARCH_ICO = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="#a39bbd" stroke-width="1.6"/><path d="M11 11l4 4" stroke="#a39bbd" stroke-width="1.6"/></svg>'
 
@@ -72,9 +70,8 @@ HEADER = f"""<header><div class="wrap">
 
 FOOTER = """<footer><div class="wrap" style="display:block">
 <div class="ftop"><div style="flex:1 1 520px"><h4>Follow BoDleasons</h4><div class="follow">""" + "".join(
-    f'<a href="{u}" target="_blank" rel="noopener" data-gc="follow-{k}">{ICO[k]}<span>{n}</span></a>' for k, n, u in SOCIALS) + """</div></div>
-<div class="fside"><h4>Support &amp; licensing</h4><div class="row2"><a class="btn" href="https://fanlink.tv/BDfn" target="_blank" rel="noopener">🎧 Stream</a><a class="btn" href="https://www.paypal.com/donate/?hosted_button_id=PZHDXKT7N2G76" target="_blank" rel="noopener">☕ Support</a><a class="btn" href="mailto:bodleason.make@gmail.com">✉️ Licensing</a></div>
-<p style="margin:4px 0 0;font-size:13px">Commercial license or claim release: <a href="mailto:bodleason.make@gmail.com" style="text-decoration:underline">bodleason.make@gmail.com</a></p></div></div>
+    f'<a href="{u}"{"" if u.startswith("mailto:") else " target=\"_blank\" rel=\"noopener\""} data-gc="follow-{k}">{ICO[k]}<span>{n}</span></a>' for k, n, u in SOCIALS) + """</div>
+<p style="margin:12px 0 0;font-size:13px">Questions, commercial license or claim release: <a href="mailto:bodleason.make@gmail.com" style="text-decoration:underline">bodleason.make@gmail.com</a></p></div></div>
 <div class="fbot"><span>© BoDleasons — music by Bohdan Kuzmin</span><span><a href="/">574+ free tracks</a> · <a href="/#license">How to use</a></span></div>
 </div></footer>"""
 
