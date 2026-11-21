@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BoDleasons — Background Music for Videos | Free with Credit</title>
 <link rel="canonical" href="https://bodleasons.com/">
-<link rel="icon" href="/logo.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png"><link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"MusicGroup","@id":"https://bodleasons.com/#artist","name":"BoDleasons","alternateName":"Bohdan Kuzmin","url":"https://bodleasons.com/","description":"BoDleasons is a Ukrainian composer and producer (Bohdan Kuzmin) creating royalty-free background music for videos: corporate, cinematic, lo-fi, ambient, electronic, rock and more.","genre":["Corporate","Cinematic","Ambient","Lo-Fi","Electronic","Rock","Acoustic"],"foundingLocation":{"@type":"Place","name":"Ukraine"},"image":"https://bodleasons.com/og.jpg","logo":"https://bodleasons.com/logo.png","sameAs":["https://www.youtube.com/@bodleasons","https://open.spotify.com/artist/6rcXZpBn9xgjCFcA6lPLm1","https://music.apple.com/artist/bodleasons/1585254075","https://www.instagram.com/bodleasons/","https://www.tiktok.com/@bodleasons","https://pixabay.com/users/bodleasons-28047609/","https://t.me/bodleasons","https://www.facebook.com/profile.php?id=61595615733055","https://soundcloud.com/bogdan-kuzmin-7298004","https://freemusicarchive.org/music/bodleasons/","https://artlist.io/royalty-free-music/artist/bodleasons/3724","https://music.youtube.com/channel/UCUy2KBrbyYU1f1QccHY_KgA"]},{"@type":"WebSite","@id":"https://bodleasons.com/#website","url":"https://bodleasons.com/","name":"BoDleasons","alternateName":"BoDleasons — Background Music for Videos","publisher":{"@id":"https://bodleasons.com/#artist"}}]}</script>
 <meta name="description" content="Background music for YouTube, Shorts, Reels and TikTok by Ukrainian composer BoDleasons (Bohdan Kuzmin). Instant MP3 download, all versions in one ZIP. Free to use with credit.">
 <meta property="og:image" content="https://bodleasons.com/og.jpg">
@@ -16,7 +16,7 @@
 <meta property="og:description" content="Instant MP3 download. Free to use with credit in YouTube, Shorts, Reels and TikTok.">
 <meta name="theme-color" content="#0d0b16">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=20261121c">
+<link rel="stylesheet" href="/assets/site.css?v=20261121d">
 </head>
 <body>
 <header><div class="wrap">
@@ -48,7 +48,7 @@ Free download: https://bodleasons.com/t/[track]/</code><p>Every track has a read
 <p style="margin:12px 0 0;font-size:13px">Questions, commercial license or claim release: <a href="mailto:bodleason.make@gmail.com" style="text-decoration:underline">bodleason.make@gmail.com</a></p></div></div>
 <div class="fbot"><span>© BoDleasons — music by Bohdan Kuzmin</span><span><a href="/">574+ free tracks</a> · <a href="/#license">How to use</a></span></div>
 </div></footer>
-<script src="/assets/site.js?v=20261121c"></script>
+<script src="/assets/site.js?v=20261121d"></script>
 <script>
 (function(){
 const {slug,esc,fmt,DL,TH,I,TR,GORDER,rowHTML,mark,REL}=window.BOD;
@@ -90,7 +90,7 @@ async function init(){
   const get=(n,d)=>fetch('/data/'+n+'.json',{cache:'no-cache'}).then(r=>r.ok?r.json():d).catch(()=>d);
   const [tracks,nw,rank,au,so,me,wv,av]=await Promise.all([get('tracks',[]),get('new',[]),get('rank',{}),get('audio',{}),get('social',{}),get('meta',{}),get('wave',{}),get('audio_v',{})]);
   RANK=rank||{}; META=me||{};
-  ALL=tracks.map(t=>{const s=slug(t.t),w=wv[s]||{},m=META[s]||{};const x={s,t:t.t,g:t.g,mp3:t.mp3,zip:t.zip||'',cover:t.cover||'',d:w.d||m.dur||0,v:w.v||(m.v||[]).map(v=>[v.replace(' Version',''),0]),p:w.p||'',sh:(so[s]||{}).shorts||'',av:(av[s]||{}).v||[],src:au[s]?REL+s+'.mp3':(t.p?'/previews/'+s+'.mp3':''),rd:m.rd||''};TR[s]=x;return x});
+  ALL=tracks.map(t=>{const s=slug(t.t),w=wv[s]||{},m=META[s]||{};const x={s,t:t.t,g:t.g,mp3:t.mp3,zip:t.zip||'',cover:t.cover||'',d:w.d||m.dur||0,v:w.v||(m.v||[]).map(v=>[v.replace(' Version',''),0]),p:w.p||'',sh:(so[s]||{}).shorts||'',av:(av[s]||{}).v||[],ar:(av[s]||{}).r||'audio',src:au[s]?REL+s+'.mp3':(t.p?'/previews/'+s+'.mp3':''),rd:m.rd||''};TR[s]=x;return x});
   if(!Object.keys(RANK).length) G='__all';
   $('nTracks').textContent=ALL.length;
   const now=new Date(),week=7*864e5,seen=new Set();

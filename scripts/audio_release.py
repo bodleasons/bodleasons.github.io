@@ -72,6 +72,20 @@ def versions():
     try: done = json.load(open("data/audio_v.json"))
     except Exception: done = {}
     tracks.sort(key=lambda t: rank.get(t["t"], 10**9))
+    # у релиза GitHub лимит 1000 файлов: версии кладём в релизы edits1, edits2, … (в «audio» уже полные треки)
+    counts = {}
+    def rel_for(k):
+        for i in range(1, 20):
+            r = f"edits{i}"
+            if r not in counts:
+                if sh("gh", "release", "view", r, check=False).returncode != 0:
+                    sh("gh", "release", "create", r, "--title", f"Track edits {i}", "--notes", "Edits (Medium/Short) for the bodleasons.com player.")
+                    counts[r] = 0
+                else:
+                    try: counts[r] = len(json.loads(sh("gh", "release", "view", r, "--json", "assets").stdout).get("assets", []))
+                    except Exception: counts[r] = 999
+            if counts[r] + k <= 990: return r
+        raise RuntimeError("нет места в релизах edits")
     todo = [t for t in tracks if t.get("zip") and str((done.get(slug(t["t"])) or {}).get("k")) != str(ver.get(slug(t["t"]), "1"))][:VLIMIT]
     n = 0
     for t in todo:
@@ -92,8 +106,11 @@ def versions():
                     sh("ffmpeg", "-y", "-v", "error", "-i", src, "-map", "0:a", "-map_metadata", "-1", "-c:a", "libmp3lame", "-b:a", "128k", out)
                     names.append(v)
             outs = glob.glob(os.path.join(tmp, f"{s}__*.mp3"))
-            if outs: sh("gh", "release", "upload", "audio", *outs, "--clobber")
-            done[s] = {"k": ver.get(s, "1"), "v": names}; n += 1
+            r = (done.get(s) or {}).get("r") or rel_for(len(outs))
+            if outs:
+                sh("gh", "release", "upload", r, *outs, "--clobber")
+                if r in counts and not (done.get(s) or {}).get("r"): counts[r] += len(outs)
+            done[s] = {"k": ver.get(s, "1"), "v": names, "r": r}; n += 1
             if n % 10 == 0: json.dump(done, open("data/audio_v.json", "w"), separators=(",", ":"))
         except Exception as e:
             print("версии", t["t"], e)

@@ -6,7 +6,7 @@ sitemap.xml, robots.txt. Данные: data/tracks.json, rank.json, meta.json, a
 import html, json, os, re, datetime
 SITE = "https://bodleasons.com"
 REL = "https://github.com/bodleasons/bodleasons.github.io/releases/download/audio/"
-ASSET_V = "20261121c"
+ASSET_V = "20261121d"
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 e = lambda s: html.escape(str(s), quote=True)
 DL = lambda i: f"https://drive.google.com/uc?export=download&id={i}"
@@ -143,8 +143,8 @@ def main():
         vers = w.get("v") or [[v.replace(" Version", ""), 0] for v in m.get("v", [])]
         X[s] = {"s": s, "t": t["t"], "g": t["g"], "mp3": t.get("mp3", ""), "zip": t.get("zip", ""), "cover": t.get("cover", ""),
                 "d": w.get("d") or m.get("dur") or 0, "v": vers, "p": w.get("p", ""), "al": m.get("al", "Single"),
-                "av": (av.get(s) or {}).get("v", []), "sh": (social.get(s) or {}).get("shorts", ""), "src": (REL + s + ".mp3") if s in audio else (f"/previews/{s}.mp3" if t.get("p") else "")}
-    tr = lambda xs: {x["s"]: {k: x[k] for k in ("s", "t", "g", "mp3", "zip", "cover", "d", "v", "p", "sh", "src", "av")} for x in xs}
+                "av": (av.get(s) or {}).get("v", []), "ar": (av.get(s) or {}).get("r", "audio"), "sh": (social.get(s) or {}).get("shorts", ""), "src": (REL + s + ".mp3") if s in audio else (f"/previews/{s}.mp3" if t.get("p") else "")}
+    tr = lambda xs: {x["s"]: {k: x[k] for k in ("s", "t", "g", "mp3", "zip", "cover", "d", "v", "p", "sh", "src", "av", "ar")} for x in xs}
     bygenre = {}
     for t in tracks: bygenre.setdefault(t["g"], []).append(t)
     gorder = [g for g in GORDER if g in bygenre] + sorted(g for g in bygenre if g not in GORDER)
