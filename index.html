@@ -16,7 +16,7 @@
 <meta property="og:description" content="Instant MP3 download. Free to use with credit in YouTube, Shorts, Reels and TikTok.">
 <meta name="theme-color" content="#0d0b16">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=20261121">
+<link rel="stylesheet" href="/assets/site.css?v=20261121b">
 </head>
 <body>
 <header><div class="wrap">
@@ -49,7 +49,7 @@ Free download: https://bodleasons.com/t/[track]/</code><p>Every track has a read
 <p style="margin:4px 0 0;font-size:13px">Commercial license or claim release: <a href="mailto:bodleason.make@gmail.com" style="text-decoration:underline">bodleason.make@gmail.com</a></p></div></div>
 <div class="fbot"><span>© BoDleasons — music by Bohdan Kuzmin</span><span><a href="/">574+ free tracks</a> · <a href="/#license">How to use</a></span></div>
 </div></footer>
-<script src="/assets/site.js?v=20261121"></script>
+<script src="/assets/site.js?v=20261121b"></script>
 <script>
 (function(){
 const {slug,esc,fmt,DL,TH,I,TR,GORDER,rowHTML,mark,REL}=window.BOD;
@@ -89,9 +89,9 @@ function newBlock(){
 }
 async function init(){
   const get=(n,d)=>fetch('/data/'+n+'.json',{cache:'no-cache'}).then(r=>r.ok?r.json():d).catch(()=>d);
-  const [tracks,nw,rank,au,so,me,wv]=await Promise.all([get('tracks',[]),get('new',[]),get('rank',{}),get('audio',{}),get('social',{}),get('meta',{}),get('wave',{})]);
+  const [tracks,nw,rank,au,so,me,wv,av]=await Promise.all([get('tracks',[]),get('new',[]),get('rank',{}),get('audio',{}),get('social',{}),get('meta',{}),get('wave',{}),get('audio_v',{})]);
   RANK=rank||{}; META=me||{};
-  ALL=tracks.map(t=>{const s=slug(t.t),w=wv[s]||{},m=META[s]||{};const x={s,t:t.t,g:t.g,mp3:t.mp3,zip:t.zip||'',cover:t.cover||'',d:w.d||m.dur||0,v:w.v||(m.v||[]).map(v=>[v.replace(' Version',''),0]),p:w.p||'',sh:(so[s]||{}).shorts||'',src:au[s]?REL+s+'.mp3':(t.p?'/previews/'+s+'.mp3':''),rd:m.rd||''};TR[s]=x;return x});
+  ALL=tracks.map(t=>{const s=slug(t.t),w=wv[s]||{},m=META[s]||{};const x={s,t:t.t,g:t.g,mp3:t.mp3,zip:t.zip||'',cover:t.cover||'',d:w.d||m.dur||0,v:w.v||(m.v||[]).map(v=>[v.replace(' Version',''),0]),p:w.p||'',sh:(so[s]||{}).shorts||'',av:(av[s]||{}).v||[],src:au[s]?REL+s+'.mp3':(t.p?'/previews/'+s+'.mp3':''),rd:m.rd||''};TR[s]=x;return x});
   if(!Object.keys(RANK).length) G='__all';
   $('nTracks').textContent=ALL.length;
   const now=new Date(),week=7*864e5,seen=new Set();

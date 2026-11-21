@@ -58,5 +58,50 @@ def main():
     json.dump(done, open("data/audio.json", "w"), separators=(",", ":"))
     print(f"полных треков загружено: {n}, всего в релизе: {len(done)}, осталось: {sum(1 for t in tracks if str(done.get(slug(t['t']))) != str(ver.get(slug(t['t']), '1')))}")
 
+
+def versions():
+    """Отдельные версии (Medium, Short…) из ZIP → релиз «audio» как <slug>__<версия>.mp3, чтобы их слушать прямо на сайте.
+    Что загружено — data/audio_v.json {slug: {"k": ключ из versions.json, "v": [имена версий]}}. Сначала популярные треки."""
+    import zipfile, io, glob, shutil
+    VLIMIT = int(os.environ.get("AUDIO_V_LIMIT", "150"))
+    tracks = json.load(open("data/tracks.json"))
+    try: ver = json.load(open("data/versions.json"))
+    except Exception: ver = {}
+    try: rank = json.load(open("data/rank.json"))
+    except Exception: rank = {}
+    try: done = json.load(open("data/audio_v.json"))
+    except Exception: done = {}
+    tracks.sort(key=lambda t: rank.get(t["t"], 10**9))
+    todo = [t for t in tracks if t.get("zip") and str((done.get(slug(t["t"])) or {}).get("k")) != str(ver.get(slug(t["t"]), "1"))][:VLIMIT]
+    n = 0
+    for t in todo:
+        s = slug(t["t"]); tmp = f"/tmp/av/{s}"; os.makedirs(tmp, exist_ok=True)
+        try:
+            data = get(f"https://drive.google.com/uc?export=download&id={t['zip']}")
+            if data[:2] != b"PK":
+                m = re.search(rb'name="uuid" value="([^"]+)"', data)            # большой файл: страница подтверждения Google
+                if m: data = get(f"https://drive.usercontent.google.com/download?id={t['zip']}&export=download&confirm=t&uuid={m.group(1).decode()}")
+            if data[:2] != b"PK": print("не ZIP:", t["t"]); continue
+            names = []
+            with zipfile.ZipFile(io.BytesIO(data)) as z:
+                for nm in z.namelist():
+                    mv = re.search(r"\((.+?) Version\)", nm)
+                    if not mv or nm.startswith("__MACOSX") or not nm.lower().endswith((".mp3", ".wav", ".m4a")): continue
+                    v = mv.group(1); src = os.path.join(tmp, "src" + os.path.splitext(nm)[1]); out = os.path.join(tmp, f"{s}__{slug(v)}.mp3")
+                    with z.open(nm) as a, open(src, "wb") as b: shutil.copyfileobj(a, b)
+                    sh("ffmpeg", "-y", "-v", "error", "-i", src, "-map", "0:a", "-map_metadata", "-1", "-c:a", "libmp3lame", "-b:a", "128k", out)
+                    names.append(v)
+            outs = glob.glob(os.path.join(tmp, f"{s}__*.mp3"))
+            if outs: sh("gh", "release", "upload", "audio", *outs, "--clobber")
+            done[s] = {"k": ver.get(s, "1"), "v": names}; n += 1
+            if n % 10 == 0: json.dump(done, open("data/audio_v.json", "w"), separators=(",", ":"))
+        except Exception as e:
+            print("версии", t["t"], e)
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+    json.dump(done, open("data/audio_v.json", "w"), separators=(",", ":"))
+    print(f"треков с версиями загружено: {n}, всего: {len(done)}, осталось: {sum(1 for t in tracks if t.get('zip') and str((done.get(slug(t['t'])) or {}).get('k')) != str(ver.get(slug(t['t']), '1')))}")
+
 if __name__ == "__main__":
     main()
+    versions()

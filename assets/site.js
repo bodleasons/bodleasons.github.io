@@ -35,7 +35,7 @@
   function tagsOf(t) { return (USES[t.g] || '').split(', ').map(x => x.replace(/^and /, '')).slice(0, 2) }
   function versRows(t, withActs) {
     const v = [['Full', t.d]].concat(t.v || []);
-    const rows = v.map(([n, d], i) => `<div class="vr">${i === 0 ? `<button class="pb pbx" data-play="${t.s}" aria-label="Play ${esc(t.t)}">${I.play}</button>` : '<span class="ph" title="Inside the ZIP">ZIP</span>'}<span class="n">${esc(n)}</span><span class="u">${useOf(n)}</span><span class="d">${d ? fmt(d) : ''}</span></div>`).join('');
+    const rows = v.map(([n, d], i) => `<div class="vr">${i === 0 ? `<button class="pb pbx" data-play="${t.s}" aria-label="Play ${esc(t.t)}">${I.play}</button>` : (t.av || []).includes(n) ? `<button class="pb pbx" data-play="${t.s}" data-v="${esc(n)}" aria-label="Play ${esc(t.t)} ${esc(n)}">${I.play}</button>` : '<span class="ph" title="Inside the ZIP">ZIP</span>'}<span class="n">${esc(n)}</span><span class="u">${useOf(n)}</span><span class="d">${d ? fmt(d) : ''}</span></div>`).join('');
     if (!withActs) return rows;
     return rows + `<div class="ft">${t.zip ? `<a class="btn main" href="${DL(t.zip)}" rel="nofollow" data-gc="zip">${I.zip} All ${v.length} edits · ZIP</a>` : ''}<a class="btn" href="${DL(t.mp3)}" rel="nofollow" data-gc="mp3">${I.dl} Full MP3</a><button class="btn" data-copy="${t.s}">${I.copy} Copy credit</button>${t.sh ? `<a class="btn soc" href="${esc(t.sh)}" target="_blank" rel="noopener" data-gc="use-yt">${I.yt} Use in YT Shorts</a>` : ''}</div>`;
   }
@@ -65,34 +65,34 @@
 <button class="sk" id="bX" aria-label="Close player" style="border:0;background:transparent;width:36px;height:36px"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1L1 11" stroke="#a39bbd" stroke-width="1.6"/></svg></button></div>`;
   const toastEl = document.createElement('div'); toastEl.className = 'toast'; toastEl.id = 'toast';
   const au = new Audio(); au.preload = 'none';
-  let CUR = null;
+  let CUR = null, CURV = null;
   function $(id) { return document.getElementById(id) }
-  function play(s) {
-    const t = TR[s]; if (!t) return;
-    if (CUR === s) { au.paused ? au.play() : au.pause(); return }
-    CUR = s;
-    const full = t.src || ('/previews/' + s + '.mp3');
-    au.src = full; au.onerror = () => { if (!au.src.includes('/previews/')) { au.src = '/previews/' + s + '.mp3'; au.play().catch(() => {}) } };
+  function play(s, v) {
+    const t = TR[s]; if (!t) return; v = v || null;
+    if (CUR === s && CURV === v) { au.paused ? au.play() : au.pause(); return }
+    CUR = s; CURV = v;
+    const full = v ? REL + s + '__' + slug(v) + '.mp3' : (t.src || ('/previews/' + s + '.mp3'));
+    au.src = full; au.onerror = () => { if (v) { toast('This edit is coming soon — it is inside the ZIP'); return } if (!au.src.includes('/previews/')) { au.src = '/previews/' + s + '.mp3'; au.play().catch(() => {}) } };
     au.play().catch(() => {});
     if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'play/' + s, title: 'play: ' + t.t, event: true });
-    $('bCv').src = TH(t.cover, 120); const bt = $('bT'); bt.textContent = t.t; bt.href = '/t/' + s + '/';
-    $('bH').textContent = t.g + ' · by BoDleasons'; $('bDl').href = DL(t.mp3);
+    $('bCv').src = TH(t.cover, 120); const bt = $('bT'); bt.textContent = t.t + (v ? ' · ' + v : ''); bt.href = '/t/' + s + '/';
+    $('bH').textContent = v ? 'Edit · from the Full Pack' : t.g + ' · by BoDleasons'; $('bDl').href = DL(t.mp3);
     bar.classList.add('on'); document.body.classList.add('hasbar'); mark();
   }
   function queue() { const q = []; document.querySelectorAll('[data-play]').forEach(b => { const s = b.dataset.play; if (q[q.length - 1] !== s && !q.includes(s)) q.push(s) }); return q }
   function step(d) { if (!CUR) return; const q = queue(); if (!q.length) return; const i = q.indexOf(CUR); play(q[(i + d + q.length) % q.length]) }
-  function closeBar() { au.pause(); CUR = null; bar.classList.remove('on'); document.body.classList.remove('hasbar'); mark() }
+  function closeBar() { au.pause(); CUR = null; CURV = null; bar.classList.remove('on'); document.body.classList.remove('hasbar'); mark() }
   function mark() {
     const on = !au.paused;
     if ($('bPP')) $('bPP').innerHTML = on ? I.pause : I.play;
     document.querySelectorAll('.row').forEach(r => r.classList.toggle('on', r.dataset.s === CUR));
-    document.querySelectorAll('.pbx,[data-play].pb').forEach(b => { const me = b.dataset.play === CUR; b.innerHTML = me && on ? I.pause : I.play; b.classList.toggle('on', me) });
+    document.querySelectorAll('.pbx,[data-play].pb').forEach(b => { const me = b.dataset.play === CUR && (b.dataset.v || null) === CURV; b.innerHTML = me && on ? I.pause : I.play; b.classList.toggle('on', me) });
   }
   au.addEventListener('play', mark); au.addEventListener('pause', mark); au.addEventListener('ended', () => step(1));
   au.addEventListener('timeupdate', () => {
     const d = au.duration || (TR[CUR] || {}).d || 60, p = au.currentTime / d;
     $('bC').textContent = fmt(au.currentTime); $('bD').textContent = fmt(d); $('bF').style.width = (p * 100) + '%';
-    document.querySelectorAll(`.wave[data-w="${CUR}"]`).forEach(w => { const b = w.children, n = Math.round(p * b.length); for (let i = 0; i < b.length; i++) b[i].classList.toggle('p', i < n) });
+    document.querySelectorAll(`.wave[data-w="${CUR}"]`).forEach(w => { const b = w.children, n = Math.round(p * b.length); for (let i = 0; i < b.length; i++) b[i].classList.toggle('p', i < n && !CURV) });
   });
   function toast(t) { toastEl.textContent = t; toastEl.classList.add('on'); clearTimeout(toastEl._t); toastEl._t = setTimeout(() => toastEl.classList.remove('on'), 2600) }
   function copyText(c, msg) { (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject()).then(() => toast(msg + '\n' + c), () => prompt('Copy:', c)) }
@@ -100,7 +100,7 @@
   document.addEventListener('click', e => {
     const el = e.target.closest('[data-play],[data-copy],[data-ed],[data-step],.wave[data-w],#bPP,#bX,#bTr,[data-copytext]');
     if (!el) return;
-    if (el.dataset.play) { play(el.dataset.play) }
+    if (el.dataset.play) { play(el.dataset.play, el.dataset.v) }
     else if (el.dataset.copy) { const t = TR[el.dataset.copy]; if (t) copyText(credit(t), 'Credit copied ✓') }
     else if (el.dataset.copytext) { copyText(el.dataset.copytext, 'Copied ✓') }
     else if (el.dataset.ed) { const p = $('vp-' + el.dataset.ed); if (p) { if (!p.innerHTML.trim() && TR[el.dataset.ed]) p.innerHTML = versRows(TR[el.dataset.ed], true); p.hidden = !p.hidden; mark() } }
@@ -110,7 +110,7 @@
     else if (el.id === 'bTr' || el.dataset.w) {
       const r = el.getBoundingClientRect(), p = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), s = el.dataset.w || CUR;
       if (!s) return;
-      if (CUR !== s) { play(s); au.addEventListener('loadedmetadata', function f() { au.currentTime = au.duration * p; au.removeEventListener('loadedmetadata', f) }) }
+      if (CUR !== s || CURV) { CUR = null; play(s); au.addEventListener('loadedmetadata', function f() { au.currentTime = au.duration * p; au.removeEventListener('loadedmetadata', f) }) }
       else if (au.duration) au.currentTime = au.duration * p;
     }
   });

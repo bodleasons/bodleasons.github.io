@@ -6,7 +6,7 @@ sitemap.xml, robots.txt. Данные: data/tracks.json, rank.json, meta.json, a
 import html, json, os, re, datetime
 SITE = "https://bodleasons.com"
 REL = "https://github.com/bodleasons/bodleasons.github.io/releases/download/audio/"
-ASSET_V = "20261121"
+ASSET_V = "20261121b"
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 e = lambda s: html.escape(str(s), quote=True)
 DL = lambda i: f"https://drive.google.com/uc?export=download&id={i}"
@@ -110,6 +110,7 @@ def versrows(x, acts):
     out = []
     for i, (n, d) in enumerate(v):
         if i == 0: btn = f'<button class="pb pbx" data-play="{x["s"]}" aria-label="Play {e(x["t"])}">{PLAY}</button>'
+        elif n in x.get("av", []): btn = f'<button class="pb pbx" data-play="{x["s"]}" data-v="{e(n)}" aria-label="Play {e(x["t"])} {e(n)}">{PLAY}</button>'
         else: btn = '<span class="ph" title="Inside the ZIP">ZIP</span>'
         out.append(f'<div class="vr">{btn}<span class="n">{e(n)}</span><span class="u">{use_of(n)}</span><span class="d">{fmt(d) if d else ""}</span></div>')
     rows = "".join(out)
@@ -136,7 +137,7 @@ def row(x):
 
 def main():
     tracks = load("data/tracks.json", []); rank = load("data/rank.json", {}); meta = load("data/meta.json", {})
-    audio = load("data/audio.json", {}); social = load("data/social.json", {}); plat = load("data/platforms.json", {}); wv = load("data/wave.json", {})
+    audio = load("data/audio.json", {}); social = load("data/social.json", {}); plat = load("data/platforms.json", {}); wv = load("data/wave.json", {}); av = load("data/audio_v.json", {})
     rk = lambda t: rank.get(t["t"], 10**9)
     today = datetime.date.today().isoformat(); urls = [(SITE + "/", "1.0")]
     X = {}
@@ -145,8 +146,8 @@ def main():
         vers = w.get("v") or [[v.replace(" Version", ""), 0] for v in m.get("v", [])]
         X[s] = {"s": s, "t": t["t"], "g": t["g"], "mp3": t.get("mp3", ""), "zip": t.get("zip", ""), "cover": t.get("cover", ""),
                 "d": w.get("d") or m.get("dur") or 0, "v": vers, "p": w.get("p", ""), "al": m.get("al", "Single"),
-                "sh": (social.get(s) or {}).get("shorts", ""), "src": (REL + s + ".mp3") if s in audio else (f"/previews/{s}.mp3" if t.get("p") else "")}
-    tr = lambda xs: {x["s"]: {k: x[k] for k in ("s", "t", "g", "mp3", "zip", "cover", "d", "v", "p", "sh", "src")} for x in xs}
+                "av": (av.get(s) or {}).get("v", []), "sh": (social.get(s) or {}).get("shorts", ""), "src": (REL + s + ".mp3") if s in audio else (f"/previews/{s}.mp3" if t.get("p") else "")}
+    tr = lambda xs: {x["s"]: {k: x[k] for k in ("s", "t", "g", "mp3", "zip", "cover", "d", "v", "p", "sh", "src", "av")} for x in xs}
     bygenre = {}
     for t in tracks: bygenre.setdefault(t["g"], []).append(t)
     gorder = [g for g in GORDER if g in bygenre] + sorted(g for g in bygenre if g not in GORDER)
@@ -188,7 +189,7 @@ def main():
 <p class="note">Free to use with credit: paste the credit line into your video description. Monetized videos may get a Content ID claim — that's normal, your video stays up.</p>
 {f'<p class="plh">Use in short videos</p><div class="pl">{ub}</div>' if ub else ''}{f'<p class="plh">Listen on</p><div class="pl">{lb}</div>' if lb else ''}
 <div class="two">
-<div><div class="sech" style="margin-top:0"><h2 style="font-size:17px">Edits — {n_ed} versions in the Full Pack</h2></div><div class="vp" style="margin:0">{versrows(x, False)}</div></div>
+<div><div class="sech" style="margin-top:0"><h2 style="font-size:17px">Edits — listen and download ({n_ed} in the Full Pack)</h2></div><div class="vp" style="margin:0">{versrows(x, False)}</div></div>
 <div style="display:flex;flex-direction:column;gap:14px">
 <div class="box"><h3>How to credit</h3><p style="margin:0">Paste into your video description:</p><code class="credit">{e(cred)}</code><button class="btn" data-copy="{s}">{I_COPY} Copy credit</button>
 <p>A Content ID claim is not a strike — your video stays online. Want the claim released or a commercial license? Email the video link to <a href="mailto:bodleason.make@gmail.com" style="text-decoration:underline">bodleason.make@gmail.com</a>.</p></div>
