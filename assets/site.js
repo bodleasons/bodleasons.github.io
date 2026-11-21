@@ -40,7 +40,7 @@
     return rows + `<div class="ft">${t.zip ? `<a class="btn main" href="${DL(t.zip)}" rel="nofollow" data-gc="zip">${I.zip} All ${v.length} edits · ZIP</a>` : ''}<a class="btn" href="${DL(t.mp3)}" rel="nofollow" data-gc="mp3">${I.dl} Full MP3</a><button class="btn" data-copy="${t.s}">${I.copy} Copy credit</button>${t.sh ? `<a class="btn soc" href="${esc(t.sh)}" target="_blank" rel="noopener" data-gc="use-yt">${I.yt} Use in YT Shorts</a>` : ''}</div>`;
   }
   function hydrate(root) {
-    (root || document).querySelectorAll('.wave[data-w]').forEach(w => { if (w.children.length) return; const t = TR[w.dataset.w]; if (!t) return; const n = +(w.dataset.n || 64); w.innerHTML = waveHTML(t, n).replace(/^<div[^>]*>|<\/div>$/g, '') });
+    (root || document).querySelectorAll('.wave[data-w]').forEach(w => { if (w.children.length) return; const t = TR[w.dataset.w]; if (!t) return; const max = +(w.dataset.n || 64), fit = Math.floor((w.clientWidth || 600) / 4), n = Math.max(24, Math.min(max, fit || max)); w.innerHTML = waveHTML(t, n).replace(/^<div[^>]*>|<\/div>$/g, '') });
   }
   function rowHTML(t) {
     const n = (t.v || []).length + 1, gs = t.g.split(',')[0];
@@ -90,6 +90,7 @@
   }
   au.addEventListener('play', mark); au.addEventListener('pause', mark); au.addEventListener('ended', () => step(1));
   au.addEventListener('timeupdate', () => {
+    if (drag) return;
     const d = au.duration || (TR[CUR] || {}).d || 60, p = au.currentTime / d;
     $('bC').textContent = fmt(au.currentTime); $('bD').textContent = fmt(d); $('bF').style.width = (p * 100) + '%';
     document.querySelectorAll(`.wave[data-w="${CUR}"]`).forEach(w => { const b = w.children, n = Math.round(p * b.length); for (let i = 0; i < b.length; i++) b[i].classList.toggle('p', i < n && !CURV) });
@@ -98,7 +99,7 @@
   function copyText(c, msg) { (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject()).then(() => toast(msg + '\n' + c), () => prompt('Copy:', c)) }
 
   document.addEventListener('click', e => {
-    const el = e.target.closest('[data-play],[data-copy],[data-ed],[data-step],.wave[data-w],#bPP,#bX,#bTr,[data-copytext]');
+    const el = e.target.closest('[data-play],[data-copy],[data-ed],[data-step],#bPP,#bX,[data-copytext]');
     if (!el) return;
     if (el.dataset.play) { play(el.dataset.play, el.dataset.v) }
     else if (el.dataset.copy) { const t = TR[el.dataset.copy]; if (t) copyText(credit(t), 'Credit copied ✓') }
@@ -107,12 +108,24 @@
     else if (el.dataset.step) { step(+el.dataset.step) }
     else if (el.id === 'bPP') { if (CUR) au.paused ? au.play() : au.pause() }
     else if (el.id === 'bX') { closeBar() }
-    else if (el.id === 'bTr' || el.dataset.w) {
-      const r = el.getBoundingClientRect(), p = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), s = el.dataset.w || CUR;
-      if (!s) return;
-      if (CUR !== s || CURV) { CUR = null; play(s); au.addEventListener('loadedmetadata', function f() { au.currentTime = au.duration * p; au.removeEventListener('loadedmetadata', f) }) }
-      else if (au.duration) au.currentTime = au.duration * p;
-    }
+  });
+  /* drag to seek (waveform and player bar), like YouTube Music */
+  let drag = null;
+  function paint(p) { $('bF').style.width = (p * 100) + '%'; if (au.duration) $('bC').textContent = fmt(au.duration * p);
+    document.querySelectorAll(`.wave[data-w="${CUR}"]`).forEach(w => { const b = w.children, n = Math.round(p * b.length); for (let i = 0; i < b.length; i++) b[i].classList.toggle('p', i < n && !CURV) }) }
+  document.addEventListener('pointerdown', e => {
+    const el = e.target.closest('.wave[data-w], #bTr'); if (!el || e.button > 0) return;
+    const bar_ = el.id === 'bTr', s = bar_ ? CUR : el.dataset.w; if (!s) return;
+    e.preventDefault();
+    const r = el.getBoundingClientRect(), frac = ev => Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width));
+    let p = frac(e);
+    if (!bar_ && (CUR !== s || CURV)) { CUR = null; play(s); au.addEventListener('loadedmetadata', () => { au.currentTime = au.duration * (drag ? drag.p : p) }, { once: true }) }
+    drag = { el, p }; el.classList.add('drag'); paint(p);
+    try { el.setPointerCapture(e.pointerId) } catch (_) {}
+    const move = ev => { p = frac(ev); drag.p = p; paint(p) };
+    const up = () => { el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up); el.classList.remove('drag');
+      if (au.duration && CUR === s) au.currentTime = au.duration * p; else if (bar_ && au.duration) au.currentTime = au.duration * p; drag = null };
+    el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
   });
   document.addEventListener('DOMContentLoaded', () => { document.body.appendChild(bar); document.body.appendChild(toastEl); hydrate(); mark() });
   if (document.readyState !== 'loading') { document.body.appendChild(bar); document.body.appendChild(toastEl); setTimeout(() => { hydrate(); mark() }, 0) }
