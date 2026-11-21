@@ -33,6 +33,7 @@ def main():
         if not x["folder"] and x["name"].startswith("_site_"):
             path = x["name"][6:].replace("__", "/")
             if path.endswith(".py.txt"): path = path[:-4]          # .py на Диске лежит как .py.txt (иначе Google показывает «проверку на вирусы»)
+            if path.endswith(".js.txt"): path = path[:-4]          # .js — так же (Диск не отдаёт .js напрямую)
             if HOLD.get(path, 0) > time.time(): print("site: hold", path); continue
             try:
                 data = get(f"https://drive.google.com/uc?export=download&id={x['id']}")
