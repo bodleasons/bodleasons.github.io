@@ -6,7 +6,7 @@ sitemap.xml, robots.txt. Данные: data/tracks.json, rank.json, meta.json, a
 import html, json, os, re, datetime
 SITE = "https://bodleasons.com"
 REL = "https://github.com/bodleasons/bodleasons.github.io/releases/download/audio/"
-ASSET_V = "20261121e"
+ASSET_V = "20261121f"
 slug = lambda s: re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 e = lambda s: html.escape(str(s), quote=True)
 DL = lambda i: f"https://drive.google.com/uc?export=download&id={i}"

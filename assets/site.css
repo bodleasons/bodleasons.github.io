@@ -198,3 +198,12 @@ footer{padding-top:30px}
 .track i::after{content:"";position:absolute;right:-8px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.5);transform:scale(.75);transition:transform .15s}
 .track:hover i::after,.track.drag i::after{transform:scale(1)}
 .bigp{min-width:0}.bigp .wave{min-width:0}
+/* mobile player: progress on top edge (away from iPhone home-swipe) */
+@media (max-width:760px){
+ .bar .wrap{padding:14px 12px calc(10px + env(safe-area-inset-bottom));gap:8px 10px;flex-wrap:nowrap;position:relative}
+ .bar .prog{position:absolute;left:12px;right:12px;top:2px;order:0;flex:none}
+ .bar .track{height:4px}
+ .bar .meta{flex:1 1 auto}
+ .bar #bX{width:32px;height:32px;flex:none}
+ .bar img{width:42px;height:42px}
+}

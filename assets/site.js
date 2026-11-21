@@ -72,7 +72,7 @@
     if (CUR === s && CURV === v) { au.paused ? au.play() : au.pause(); return }
     CUR = s; CURV = v;
     const full = v ? REL.replace('/audio/', '/' + (t.ar || 'audio') + '/') + s + '__' + slug(v) + '.mp3' : (t.src || ('/previews/' + s + '.mp3'));
-    au.src = full; au.onerror = () => { if (v) { toast('This edit is coming soon — it is inside the ZIP'); return } if (!au.src.includes('/previews/')) { au.src = '/previews/' + s + '.mp3'; au.play().catch(() => {}) } };
+    let tries = 0; au.src = full; au.onerror = () => { if (CUR !== s || CURV !== v) return; const code = au.error && au.error.code; if (code === 1) return; if (v) { if (tries++ < 2) { setTimeout(() => { if (CUR === s && CURV === v) { au.src = full + '?t=' + Date.now(); au.play().catch(() => {}) } }, 700); return } toast('This edit could not load — try again or download the ZIP'); return } if (!au.src.includes('/previews/')) { au.src = '/previews/' + s + '.mp3'; au.play().catch(() => {}) } };
     au.play().catch(() => {});
     if (window.goatcounter && goatcounter.count) goatcounter.count({ path: 'play/' + s, title: 'play: ' + t.t, event: true });
     $('bCv').src = TH(t.cover, 120); const bt = $('bT'); bt.textContent = t.t + (v ? ' · ' + v : ''); bt.href = '/t/' + s + '/';
