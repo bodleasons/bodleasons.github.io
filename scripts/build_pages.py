@@ -216,7 +216,12 @@ def main():
         f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n')
         for u, pr in urls: f.write(f"<url><loc>{u}</loc><lastmod>{today}</lastmod><priority>{pr}</priority></url>\n")
         f.write("</urlset>\n")
-    open("robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
+    # 26.11: закрыты только краулеры для ОБУЧЕНИЯ ИИ; поиск (Google, Bing, OAI-SearchBot, Claude-SearchBot,
+    # PerplexityBot) и агенты по запросу людей (ChatGPT-User, Claude-User, Perplexity-User) — открыты.
+    ai_train = ["GPTBot", "ClaudeBot", "CCBot", "meta-externalagent", "Bytespider",
+                "cohere-training-data-crawler", "AI2Bot", "MistralAI-Training"]
+    robots = "".join(f"User-agent: {b}\n" for b in ai_train) + "Disallow: /\n\nUser-agent: *\nAllow: /\n\n"
+    open("robots.txt", "w").write(robots + f"Sitemap: {SITE}/sitemap.xml\n")
     print("страниц треков:", len(tracks), "жанров:", len(bygenre))
 
 if __name__ == "__main__":

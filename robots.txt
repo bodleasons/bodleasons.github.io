@@ -1,3 +1,14 @@
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: meta-externalagent
+User-agent: Bytespider
+User-agent: cohere-training-data-crawler
+User-agent: AI2Bot
+User-agent: MistralAI-Training
+Disallow: /
+
 User-agent: *
 Allow: /
+
 Sitemap: https://bodleasons.com/sitemap.xml
